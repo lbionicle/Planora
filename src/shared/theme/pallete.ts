@@ -36,6 +36,7 @@ export const palette = {
     60: hexWithOpacity('#1B1A1D', 60),
     40: hexWithOpacity('#1B1A1D', 40),
     10: hexWithOpacity('#1B1A1D', 10),
+    5: hexWithOpacity('#1B1A1D', 5),
   },
   green: {
     100: '#408763',
