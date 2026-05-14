@@ -7,7 +7,10 @@ export const palette = {
     500: '#1C398E',
     80: hexWithOpacity('#1C398E', 80),
     60: hexWithOpacity('#1C398E', 60),
+    50: hexWithOpacity('#1C398E', 50),
     40: hexWithOpacity('#1C398E', 40),
+    30: hexWithOpacity('#1C398E', 30),
+    20: hexWithOpacity('#1C398E', 20),
     10: hexWithOpacity('#1C398E', 10),
   },
   skyBlue: {
@@ -22,6 +25,7 @@ export const palette = {
   },
   gray: {
     100: '#D8DBDD',
+    80: hexWithOpacity('#D8DBDD', 80),
     60: hexWithOpacity('#D8DBDD', 60),
     40: hexWithOpacity('#D8DBDD', 40),
     20: hexWithOpacity('#D8DBDD', 20),
@@ -40,10 +44,14 @@ export const palette = {
   },
   green: {
     100: '#408763',
+    50: hexWithOpacity('#408763', 50),
+    30: hexWithOpacity('#408763', 30),
     10: hexWithOpacity('#408763', 10),
   },
   red: {
     100: '#DB5454',
+    50: hexWithOpacity('#DB5454', 50),
+    30: hexWithOpacity('#DB5454', 30),
     10: hexWithOpacity('#DB5454', 10),
   },
 } as const;

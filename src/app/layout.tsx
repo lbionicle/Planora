@@ -4,6 +4,8 @@ import { Inter } from 'next/font/google';
 
 import StyledComponentsRegistry from '@/lib/registry';
 
+import Providers from './providers';
+
 const inter = Inter({
   subsets: ['cyrillic'],
   weight: ['400', '500', '600'],
@@ -24,7 +26,9 @@ export default function RootLayout({ children }: PropsWithChildren): ReactNode {
   return (
     <html lang="ru">
       <body className={inter.className}>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <StyledComponentsRegistry>
+          <Providers>{children}</Providers>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

@@ -1,16 +1,24 @@
-import { PropsWithChildren } from 'react';
+'use client';
+
+import { PropsWithChildren, useState } from 'react';
+import { Provider } from 'react-redux';
 import { Toaster } from 'sonner';
 import { ThemeProvider } from 'styled-components';
 
+import { makeStore } from '@/shared/lib';
 import { GlobalStyles, theme } from '@/shared/theme';
 
 export default function Providers({ children }: PropsWithChildren) {
-  return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      {children}
+  const [store] = useState(makeStore);
 
-      <Toaster position="bottom-right" />
-    </ThemeProvider>
+  return (
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        {children}
+
+        <Toaster richColors position="bottom-right" />
+      </ThemeProvider>
+    </Provider>
   );
 }
