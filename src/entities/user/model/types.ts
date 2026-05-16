@@ -7,6 +7,7 @@ export enum UserRole {
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
   PENDING_APPROVAL = 'PENDING_APPROVAL',
+  REJECTED = 'REJECTED',
   BLOCKED = 'BLOCKED',
 }
 
@@ -15,5 +16,5 @@ export interface User {
   email: string;
   role: UserRole;
   status: UserStatus;
-  created_at: string;
+  avatar_url: string | null;
 }

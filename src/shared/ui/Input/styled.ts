@@ -2,6 +2,8 @@
 
 import styled, { css } from 'styled-components';
 
+import { media } from '@/shared/styles';
+
 import { InputVariant } from '.';
 
 interface FieldProps {
@@ -28,6 +30,7 @@ function getFieldVariantStyles(variant: InputVariant) {
 }
 
 export const Wrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.xs6};
@@ -36,6 +39,14 @@ export const Wrapper = styled.div`
 export const Label = styled.label`
   font-size: ${({ theme }) => theme.fontSize.md};
   color: ${({ theme }) => theme.text.secondary};
+
+  @media ${media.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.sm};
+  }
+
+  @media ${media.mobile} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+  }
 `;
 
 export const Field = styled.label<FieldProps>`
@@ -60,18 +71,39 @@ export const Field = styled.label<FieldProps>`
     border-color: ${({ $hasError, theme }) =>
       $hasError ? theme.border.danger : theme.border.accent};
   }
+
+  @media ${media.tablet} {
+    padding: ${({ theme }) => `${theme.spacing.xs2} ${theme.spacing.xs}`};
+    border-radius: ${({ theme }) => theme.borderRadius.sm};
+  }
 `;
 
 export const LeftIcon = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: ${({ theme }) => theme.size.icon.sm};
   height: ${({ theme }) => theme.size.icon.sm};
   color: ${({ theme }) => theme.text.muted};
+
+  @media ${media.tablet} {
+    width: ${({ theme }) => theme.size.icon.xs};
+    height: ${({ theme }) => theme.size.icon.xs};
+  }
 `;
 
 export const RightElement = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: ${({ theme }) => theme.size.icon.md};
   height: ${({ theme }) => theme.size.icon.md};
   color: ${({ theme }) => theme.text.secondary};
+
+  @media ${media.tablet} {
+    width: ${({ theme }) => theme.size.icon.sm};
+    height: ${({ theme }) => theme.size.icon.sm};
+  }
 `;
 
 export const Input = styled.input<InputProps>`
@@ -90,10 +122,22 @@ export const Input = styled.input<InputProps>`
     color: ${({ theme }) => theme.text.muted};
     cursor: not-allowed;
   }
+
+  @media ${media.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.sm};
+  }
+
+  @media ${media.mobile} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+  }
 `;
 
 export const Error = styled.span`
   color: ${({ theme }) => theme.status.danger};
   font-size: ${({ theme }) => theme.fontSize.xs};
   line-height: ${({ theme }) => theme.lineHeight.sm};
+
+  @media ${media.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.xs3};
+  }
 `;

@@ -12,6 +12,6 @@ export const baseApi = createApi({
     baseUrl: apiBaseUrl,
     credentials: 'include',
   }),
-  tagTypes: ['Auth', 'User'],
+  tagTypes: ['Auth', 'User', 'OrganizerRequests'],
   endpoints: () => ({}),
 });

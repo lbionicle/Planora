@@ -1,6 +1,6 @@
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
-type ApiErrorData = {
+interface ApiErrorData {
   success: false;
   error: {
     code: string;
@@ -10,12 +10,15 @@ type ApiErrorData = {
       message: string;
     }[];
   };
-};
+}
 
 export function getApiErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
   if (typeof error === 'object' && error !== null && 'data' in error) {
     const queryError = error as FetchBaseQueryError;
-
     const data = queryError.data as ApiErrorData | undefined;
 
     if (data?.error?.message) {

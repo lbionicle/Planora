@@ -1,0 +1,70 @@
+'use client';
+
+import { ReactNode } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+
+import { useLogoutMutation } from '@/features/auth/api/authApi';
+import {
+  selectCurrentUserAvatarUrl,
+  selectCurrentUserEmail,
+  selectIsAuthInitialized,
+} from '@/features/auth/model/selectors';
+import { getUserAvatarSrc } from '@/lib';
+import { getApiErrorMessage, useAppSelector } from '@/shared/lib';
+import { routes } from '@/shared/model/routes';
+
+import * as S from './styled';
+
+export default function WorkspaceUserBlock(): ReactNode {
+  const router = useRouter();
+
+  const isInitialized = useAppSelector(selectIsAuthInitialized);
+  const userEmail = useAppSelector(selectCurrentUserEmail);
+  const userAvatarUrl = useAppSelector(selectCurrentUserAvatarUrl);
+
+  const [logout, { isLoading: isLogoutLoading }] = useLogoutMutation();
+
+  const handleSignInClick = (): void => {
+    router.push(routes.auth.signIn);
+  };
+
+  const handleLogout = async (): Promise<void> => {
+    try {
+      await logout().unwrap();
+
+      toast.success('Вы вышли из системы');
+      router.replace(routes.auth.signIn);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error));
+    }
+  };
+
+  if (!isInitialized) {
+    return null;
+  }
+
+  if (!userEmail) {
+    return (
+      <S.UserSignIn colorScheme="accent" size="sm" onClick={handleSignInClick}>
+        Войти
+      </S.UserSignIn>
+    );
+  }
+
+  return (
+    <S.Wrapper>
+      <S.UserImage>
+        <Image
+          fill
+          src={getUserAvatarSrc(userAvatarUrl)}
+          alt="Фотография пользователя"
+          sizes="100%"
+        />
+      </S.UserImage>
+
+      <S.Email>{userEmail}</S.Email>
+    </S.Wrapper>
+  );
+}

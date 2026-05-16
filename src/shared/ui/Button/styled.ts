@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components';
 
+import { media } from '@/shared/styles';
+
 import { ButtonColorScheme, ButtonSize } from '.';
 
 interface ButtonProps {
@@ -31,6 +33,18 @@ function getSizeStyles(size: ButtonSize) {
       padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.xl6}`};
       border-radius: ${({ theme }) => theme.borderRadius.md};
       font-size: ${({ theme }) => theme.fontSize.xl};
+
+      @media ${media.tablet} {
+        padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.xl4}`};
+        border-radius: ${({ theme }) => theme.borderRadius.sm};
+        font-size: ${({ theme }) => theme.fontSize.md};
+      }
+
+      @media ${media.mobile} {
+        padding: ${({ theme }) => `${theme.spacing.xs2} ${theme.spacing.xl2}`};
+        border-radius: ${({ theme }) => theme.borderRadius.xs};
+        font-size: ${({ theme }) => theme.fontSize.xs};
+      }
     `,
   };
 

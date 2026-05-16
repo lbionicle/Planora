@@ -1,6 +1,6 @@
-'use client';
-
 import styled from 'styled-components';
+
+import { media } from '@/shared/styles';
 
 interface FieldProps {
   $hasError: boolean;
@@ -16,6 +16,14 @@ export const Wrapper = styled.div`
 export const Label = styled.label`
   color: ${({ theme }) => theme.text.secondary};
   font-size: ${({ theme }) => theme.fontSize.md};
+
+  @media ${media.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.sm};
+  }
+
+  @media ${media.mobile} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+  }
 `;
 
 export const Field = styled.label<FieldProps>`
@@ -39,14 +47,25 @@ export const Field = styled.label<FieldProps>`
   &:active:not(:disabled) {
     background-color: ${({ theme }) => theme.fileUpload.backgroundActive};
   }
+
+  @media ${media.tablet} {
+    border-radius: ${({ theme }) => theme.borderRadius.sm};
+    padding: ${({ theme }) => `${theme.spacing.xs2} ${theme.spacing.xs}`};
+  }
 `;
 
 export const Icon = styled.span`
-  width: ${({ theme }) => theme.size.icon.sm};
-  height: ${({ theme }) => theme.size.icon.sm};
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
+  width: ${({ theme }) => theme.size.icon.sm};
+  height: ${({ theme }) => theme.size.icon.sm};
+
+  @media ${media.tablet} {
+    width: ${({ theme }) => theme.size.icon.xs};
+    height: ${({ theme }) => theme.size.icon.xs};
+  }
 `;
 
 export const Text = styled.span`
@@ -55,6 +74,14 @@ export const Text = styled.span`
   font-size: ${({ theme }) => theme.fontSize.md};
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @media ${media.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.sm};
+  }
+
+  @media ${media.mobile} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+  }
 `;
 
 export const Input = styled.input`
@@ -65,4 +92,8 @@ export const Error = styled.span`
   color: ${({ theme }) => theme.status.danger};
   font-size: ${({ theme }) => theme.fontSize.xs};
   line-height: ${({ theme }) => theme.lineHeight.sm};
+
+  @media ${media.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.xs3};
+  }
 `;
