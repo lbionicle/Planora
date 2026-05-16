@@ -7,7 +7,7 @@ import Button from '@/shared/ui/Button';
 
 const EMAIL_MAX_WIDTH = '180px';
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.button`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.xs4};

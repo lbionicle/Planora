@@ -14,7 +14,9 @@ import {
 import { getUserAvatarSrc } from '@/lib';
 import { getApiErrorMessage, useAppSelector } from '@/shared/lib';
 import { routes } from '@/shared/model/routes';
+import Dropdown from '@/shared/ui/Dropdown';
 
+import WorkspaceUserMenu from '../WorkspaceUserMenu';
 import * as S from './styled';
 
 export default function WorkspaceUserBlock(): ReactNode {
@@ -29,6 +31,8 @@ export default function WorkspaceUserBlock(): ReactNode {
   const handleSignInClick = (): void => {
     router.push(routes.auth.signIn);
   };
+
+  const handleProfileClick = (): void => {};
 
   const handleLogout = async (): Promise<void> => {
     try {
@@ -54,17 +58,36 @@ export default function WorkspaceUserBlock(): ReactNode {
   }
 
   return (
-    <S.Wrapper>
-      <S.UserImage>
-        <Image
-          fill
-          src={getUserAvatarSrc(userAvatarUrl)}
-          alt="Фотография пользователя"
-          sizes="100%"
-        />
-      </S.UserImage>
+    <Dropdown
+      align="end"
+      trigger={({ triggerProps }) => (
+        <S.Wrapper {...triggerProps}>
+          <S.UserImage>
+            <Image
+              fill
+              src={getUserAvatarSrc(userAvatarUrl)}
+              alt="Фотография пользователя"
+              sizes="100%"
+            />
+          </S.UserImage>
 
-      <S.Email>{userEmail}</S.Email>
-    </S.Wrapper>
+          <S.Email>{userEmail}</S.Email>
+        </S.Wrapper>
+      )}
+    >
+      {({ close }) => (
+        <WorkspaceUserMenu
+          isLogoutLoading={isLogoutLoading}
+          onProfileClick={() => {
+            close();
+            handleProfileClick();
+          }}
+          onLogoutClick={async () => {
+            close();
+            await handleLogout();
+          }}
+        />
+      )}
+    </Dropdown>
   );
 }
