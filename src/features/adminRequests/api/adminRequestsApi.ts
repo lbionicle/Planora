@@ -23,7 +23,16 @@ export const adminRequestsApi = baseApi.injectEndpoints({
           search: search || undefined,
         },
       }),
-      providesTags: ['OrganizerRequests'],
+      providesTags: (result) =>
+        result
+          ? [
+              { type: 'OrganizerRequests', id: 'LIST' },
+              ...result.data.items.map((request) => ({
+                type: 'OrganizerRequests' as const,
+                id: request.id,
+              })),
+            ]
+          : [{ type: 'OrganizerRequests', id: 'LIST' }],
     }),
 
     approveOrganizerRequest: builder.mutation<ApiSuccessResponse<null>, string>(
@@ -32,7 +41,12 @@ export const adminRequestsApi = baseApi.injectEndpoints({
           url: `/admin/organizer-applications/${requestId}/approve`,
           method: 'PATCH',
         }),
-        invalidatesTags: ['OrganizerRequests'],
+        invalidatesTags: (_result, _error, requestId) => [
+          { type: 'OrganizerRequests', id: requestId },
+          { type: 'OrganizerRequests', id: 'LIST' },
+          { type: 'AdminUsers', id: requestId },
+          { type: 'AdminUsers', id: 'LIST' },
+        ],
       },
     ),
 
@@ -41,7 +55,12 @@ export const adminRequestsApi = baseApi.injectEndpoints({
         url: `/admin/organizer-applications/${requestId}/reject`,
         method: 'PATCH',
       }),
-      invalidatesTags: ['OrganizerRequests'],
+      invalidatesTags: (_result, _error, requestId) => [
+        { type: 'OrganizerRequests', id: requestId },
+        { type: 'OrganizerRequests', id: 'LIST' },
+        { type: 'AdminUsers', id: requestId },
+        { type: 'AdminUsers', id: 'LIST' },
+      ],
     }),
   }),
 });

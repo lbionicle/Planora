@@ -13,7 +13,12 @@ import {
 } from '@/features/auth/model/selectors';
 import ProfileModal from '@/features/profile/ui/ProfileModal';
 import { getUserAvatarSrc } from '@/lib';
-import { getApiErrorMessage, useAppSelector } from '@/shared/lib';
+import { baseApi } from '@/shared/api/baseApi';
+import {
+  getApiErrorMessage,
+  useAppDispatch,
+  useAppSelector,
+} from '@/shared/lib';
 import { routes } from '@/shared/model/routes';
 import Dropdown from '@/shared/ui/Dropdown';
 
@@ -22,6 +27,7 @@ import * as S from './styled';
 
 export default function WorkspaceUserBlock(): ReactNode {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
@@ -46,6 +52,8 @@ export default function WorkspaceUserBlock(): ReactNode {
   const handleLogout = async (): Promise<void> => {
     try {
       await logout().unwrap();
+
+      dispatch(baseApi.util.resetApiState());
 
       toast.success('Вы вышли из системы');
       router.replace(routes.auth.signIn);

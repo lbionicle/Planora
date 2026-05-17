@@ -11,6 +11,7 @@ export const theme = {
     primary: palette.white[100],
     secondary: palette.lightGray[100],
     muted: palette.gray[50],
+    accent: palette.blue[500],
   },
   fileUpload: {
     text: palette.blue[500],
@@ -136,6 +137,7 @@ export const theme = {
       height: '2px',
     },
     icon: {
+      xs2: '14px',
       xs: '16px',
       sm: '18px',
       md: '20px',

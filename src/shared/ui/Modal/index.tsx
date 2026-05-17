@@ -8,18 +8,16 @@ import Portal from '@/shared/ui/Portal';
 import * as S from './styled';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
+export type ModalBodyPadding = 'auto' | 'full' | 'none';
 
 interface ModalProps extends PropsWithChildren {
   isOpen: boolean;
   title?: string;
   size?: ModalSize;
   footer?: ReactNode;
+  bodyPadding?: ModalBodyPadding;
   closeOnOverlayClick?: boolean;
   onClose: () => void;
-}
-
-interface ModalSplitLayoutProps extends PropsWithChildren {
-  aside: ReactNode;
 }
 
 export default function Modal({
@@ -27,6 +25,7 @@ export default function Modal({
   title,
   size = 'md',
   footer,
+  bodyPadding = 'auto',
   closeOnOverlayClick = true,
   onClose,
   children,
@@ -41,6 +40,10 @@ export default function Modal({
     document.body.style.overflow = 'hidden';
 
     const handleKeyDown = (event: KeyboardEvent): void => {
+      if (!closeOnOverlayClick) {
+        return;
+      }
+
       if (event.key === 'Escape') {
         onClose();
       }
@@ -52,7 +55,7 @@ export default function Modal({
       document.body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, closeOnOverlayClick, onClose]);
 
   if (!isOpen) {
     return null;
@@ -82,23 +85,17 @@ export default function Modal({
             </S.Header>
           )}
 
-          <S.Body>{children}</S.Body>
+          <S.Body
+            $bodyPadding={bodyPadding}
+            $hasHeader={Boolean(title)}
+            $hasFooter={Boolean(footer)}
+          >
+            {children}
+          </S.Body>
 
           {footer && <S.Footer>{footer}</S.Footer>}
         </S.Dialog>
       </S.Overlay>
     </Portal>
-  );
-}
-
-export function ModalSplitLayout({
-  children,
-  aside,
-}: ModalSplitLayoutProps): ReactNode {
-  return (
-    <S.SplitLayout>
-      <S.SplitMain>{children}</S.SplitMain>
-      <S.SplitAside>{aside}</S.SplitAside>
-    </S.SplitLayout>
   );
 }

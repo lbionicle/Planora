@@ -12,6 +12,9 @@ export const baseApi = createApi({
     baseUrl: apiBaseUrl,
     credentials: 'include',
   }),
-  tagTypes: ['Auth', 'User', 'OrganizerRequests', 'Profile'],
+  tagTypes: ['Auth', 'User', 'AdminUsers', 'OrganizerRequests', 'Profile'],
+  refetchOnMountOrArgChange: true,
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
   endpoints: () => ({}),
 });

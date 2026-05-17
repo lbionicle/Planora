@@ -15,6 +15,11 @@ import {
   useUploadCurrentAvatarMutation,
 } from '@/features/profile/api/profileApi';
 import {
+  getProfileFormValues,
+  getProfilePayload,
+  hasPasswordChanges,
+} from '@/features/profile/lib/profileForm';
+import {
   AVATAR_ALLOWED_TYPES,
   AVATAR_MAX_SIZE_BYTES,
 } from '@/features/profile/model/constants';
@@ -22,14 +27,12 @@ import {
   getProfileSchema,
   ProfileFormValues,
 } from '@/features/profile/model/schemas';
-import { UpdateProfileRequest } from '@/features/profile/model/types';
 import { getApiErrorMessage, useAppDispatch } from '@/shared/lib';
 import ActionButtons from '@/shared/ui/ActionButtons';
-import Input from '@/shared/ui/Input';
 import Modal from '@/shared/ui/Modal';
-import PasswordInput from '@/shared/ui/PasswordInput';
 
 import ProfileAvatarSection from '../ProfileAvatarSection';
+import ProfileFields from '../ProfileFields';
 import * as S from './styled';
 
 interface ProfileModalProps {
@@ -38,65 +41,6 @@ interface ProfileModalProps {
 }
 
 const PROFILE_FORM_ID = 'profile-form';
-
-function getProfileFormValues(
-  role?: UserRole,
-  participantFirstName?: string,
-  participantLastName?: string,
-  companyName?: string,
-): ProfileFormValues {
-  if (role === UserRole.PARTICIPANT) {
-    return {
-      first_name: participantFirstName ?? '',
-      last_name: participantLastName ?? '',
-      company_name: '',
-      current_password: '',
-      new_password: '',
-    };
-  }
-
-  if (role === UserRole.ORGANIZER) {
-    return {
-      first_name: '',
-      last_name: '',
-      company_name: companyName ?? '',
-      current_password: '',
-      new_password: '',
-    };
-  }
-
-  return {
-    first_name: '',
-    last_name: '',
-    company_name: '',
-    current_password: '',
-    new_password: '',
-  };
-}
-
-function getProfilePayload(
-  role: UserRole,
-  values: ProfileFormValues,
-): UpdateProfileRequest {
-  if (role === UserRole.PARTICIPANT) {
-    return {
-      first_name: values.first_name,
-      last_name: values.last_name,
-    };
-  }
-
-  if (role === UserRole.ORGANIZER) {
-    return {
-      company_name: values.company_name,
-    };
-  }
-
-  return {};
-}
-
-function hasPasswordChanges(values: ProfileFormValues): boolean {
-  return Boolean(values.new_password?.trim());
-}
 
 export default function ProfileModal({
   isOpen,
@@ -129,12 +73,13 @@ export default function ProfileModal({
   const role = profile?.user.role;
 
   const formValues = useMemo(() => {
-    return getProfileFormValues(
+    return getProfileFormValues({
       role,
-      profile?.participant_profile?.first_name,
-      profile?.participant_profile?.last_name,
-      profile?.organizer_profile?.company_name,
-    );
+      email: profile?.user.email,
+      participantFirstName: profile?.participant_profile?.first_name,
+      participantLastName: profile?.participant_profile?.last_name,
+      companyName: profile?.organizer_profile?.company_name,
+    });
   }, [profile, role]);
 
   const schema = useMemo(() => getProfileSchema(role), [role]);
@@ -248,57 +193,15 @@ export default function ProfileModal({
             onDelete={handleDeleteAvatar}
           />
 
-          {role === UserRole.PARTICIPANT && (
-            <S.TwoColumns>
-              <Input
-                label="Фамилия"
-                placeholder="Введите фамилию"
-                error={errors.last_name?.message}
-                disabled={isSaving}
-                {...register('last_name')}
-              />
-
-              <Input
-                label="Имя"
-                placeholder="Введите имя"
-                error={errors.first_name?.message}
-                disabled={isSaving}
-                {...register('first_name')}
-              />
-            </S.TwoColumns>
-          )}
-
-          {role === UserRole.ORGANIZER && (
-            <Input
-              label="Название компании"
-              placeholder="Введите название компании"
-              error={errors.company_name?.message}
-              disabled={isSaving}
-              {...register('company_name')}
-            />
-          )}
-
-          <Input label="Почта" value={profile.user.email} disabled readOnly />
-
-          <S.TwoColumns>
-            <PasswordInput
-              label="Текущий пароль"
-              placeholder="Введите текущий пароль"
-              error={errors.current_password?.message}
-              disabled={isSaving}
-              autoComplete="off"
-              {...register('current_password')}
-            />
-
-            <PasswordInput
-              label="Новый пароль"
-              placeholder="Введите новый пароль"
-              error={errors.new_password?.message}
-              disabled={isSaving}
-              autoComplete="new-password"
-              {...register('new_password')}
-            />
-          </S.TwoColumns>
+          <ProfileFields
+            role={role}
+            email={profile.user.email}
+            emailMode="readonly"
+            showPasswordFields
+            disabled={isSaving}
+            register={register}
+            errors={errors}
+          />
         </S.Form>
       )}
     </Modal>

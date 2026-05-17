@@ -16,7 +16,11 @@ export const authApi = baseApi.injectEndpoints({
           method: 'POST',
           body,
         }),
-        invalidatesTags: ['Auth', 'User'],
+        invalidatesTags: [
+          { type: 'Auth', id: 'ME' },
+          { type: 'User', id: 'CURRENT' },
+          { type: 'Profile', id: 'CURRENT' },
+        ],
       },
     ),
 
@@ -29,7 +33,7 @@ export const authApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Auth', 'User'],
+      invalidatesTags: [{ type: 'AdminUsers', id: 'LIST' }],
     }),
 
     registerOrganizer: builder.mutation<
@@ -41,7 +45,10 @@ export const authApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Auth', 'User'],
+      invalidatesTags: [
+        { type: 'AdminUsers', id: 'LIST' },
+        { type: 'OrganizerRequests', id: 'LIST' },
+      ],
     }),
 
     logout: builder.mutation<ApiSuccessResponse<null>, void>({
@@ -49,7 +56,13 @@ export const authApi = baseApi.injectEndpoints({
         url: '/auth/logout',
         method: 'POST',
       }),
-      invalidatesTags: ['Auth', 'User'],
+      invalidatesTags: [
+        { type: 'Auth', id: 'ME' },
+        { type: 'User', id: 'CURRENT' },
+        { type: 'Profile', id: 'CURRENT' },
+        { type: 'AdminUsers', id: 'LIST' },
+        { type: 'OrganizerRequests', id: 'LIST' },
+      ],
     }),
 
     getMe: builder.query<ApiSuccessResponse<AuthUserResponse>, void>({
@@ -57,7 +70,10 @@ export const authApi = baseApi.injectEndpoints({
         url: '/auth/me',
         method: 'GET',
       }),
-      providesTags: ['Auth', 'User'],
+      providesTags: [
+        { type: 'Auth', id: 'ME' },
+        { type: 'User', id: 'CURRENT' },
+      ],
     }),
   }),
 });
