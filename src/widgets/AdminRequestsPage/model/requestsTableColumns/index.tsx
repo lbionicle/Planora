@@ -5,6 +5,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { OrganizerRequest } from '@/entities/organizerRequest/model/types';
 import { formatDateTime } from '@/shared/lib';
 import { CloseFillIcon, SuccessFillIcon } from '@/shared/ui/Icons';
+import TableActions from '@/shared/ui/TableActions';
 
 import * as S from './styled';
 
@@ -70,26 +71,35 @@ export function getColumns({
         const isProcessing = processingId === row.original.id;
 
         return (
-          <S.Actions>
-            <S.AcceptButton
-              size="xs"
-              colorScheme="success"
-              disabled={isProcessing}
-              type="button"
-              onClick={() => onApprove(row.original.id)}
-            >
-              <SuccessFillIcon />
-            </S.AcceptButton>
-
-            <S.RejectedButton
-              size="xs"
-              colorScheme="danger"
-              disabled={isProcessing}
-              onClick={() => onReject(row.original.id)}
-            >
-              <CloseFillIcon />
-            </S.RejectedButton>
-          </S.Actions>
+          <TableActions
+            actions={[
+              {
+                key: 'approve',
+                icon: <SuccessFillIcon />,
+                colorScheme: 'success',
+                title: 'Одобрить заявку',
+                disabled: isProcessing,
+                onClick: () => onApprove(row.original.id),
+              },
+              {
+                key: 'reject',
+                icon: <CloseFillIcon />,
+                colorScheme: 'danger',
+                title: 'Отклонить заявку',
+                disabled: isProcessing,
+                confirm: {
+                  title: 'Вы уверены, что хотите отклонить эту заявку?',
+                  description:
+                    'После отклонения организатор не сможет войти в систему с этой учетной записью.',
+                  icon: <CloseFillIcon />,
+                  confirmText: 'Отклонить',
+                  cancelText: 'Отменить',
+                  confirmColorScheme: 'danger',
+                },
+                onClick: () => onReject(row.original.id),
+              },
+            ]}
+          />
         );
       },
     },

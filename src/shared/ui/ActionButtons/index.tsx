@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, HTMLAttributes } from 'react';
 
-import Button from '@/shared/ui/Button';
+import Button, { ButtonColorScheme, ButtonSize } from '@/shared/ui/Button';
 
 import * as S from './styled';
 
@@ -12,6 +12,9 @@ export interface ActionButtonsProps extends HTMLAttributes<HTMLDivElement> {
   primaryType?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
   secondaryType?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
   primaryForm?: string;
+  primaryColorScheme?: ButtonColorScheme;
+  secondaryColorScheme?: ButtonColorScheme;
+  size?: ButtonSize;
   isLoading?: boolean;
   loadingText?: string;
   disabled?: boolean;
@@ -27,6 +30,9 @@ export default function ActionButtons({
   primaryType = 'button',
   secondaryType = 'button',
   primaryForm,
+  primaryColorScheme = 'accent',
+  secondaryColorScheme = 'secondary',
+  size = 'lg',
   isLoading = false,
   loadingText = 'Загрузка...',
   disabled = false,
@@ -38,9 +44,10 @@ export default function ActionButtons({
     <S.Wrapper {...props}>
       {secondaryText && (
         <Button
-          colorScheme="secondary"
+          colorScheme={secondaryColorScheme}
           data-slot="secondary"
           disabled={disabled || secondaryDisabled || isLoading}
+          size={size}
           type={secondaryType}
           onClick={onSecondaryClick}
         >
@@ -49,10 +56,11 @@ export default function ActionButtons({
       )}
 
       <Button
-        colorScheme="accent"
+        colorScheme={primaryColorScheme}
         data-slot="primary"
         disabled={disabled || primaryDisabled || isLoading}
         form={primaryForm}
+        size={size}
         type={primaryType}
         onClick={onPrimaryClick}
       >
