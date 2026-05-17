@@ -1,3 +1,5 @@
+import 'react-datepicker/dist/react-datepicker.css';
+
 import { PropsWithChildren, ReactNode } from 'react';
 
 import WorkspaceLayout from '@/widgets/WorkspaceLayout/ui/WorkspaceLayout';

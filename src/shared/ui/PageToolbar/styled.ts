@@ -29,6 +29,20 @@ export const Toolbar = styled.div`
   }
 `;
 
+export const Actions = styled.div`
+  display: flex;
+  align-items: stretch;
+  gap: ${({ theme }) => theme.spacing.sm};
+
+  @media ${media.tablet} {
+    gap: ${({ theme }) => theme.spacing.xs2};
+  }
+
+  @media ${media.mobile} {
+    gap: ${({ theme }) => theme.spacing.xs4};
+  }
+`;
+
 export const Bottom = styled.div`
   width: 100%;
   display: flex;

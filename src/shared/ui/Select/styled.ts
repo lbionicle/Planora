@@ -1,8 +1,13 @@
+'use client';
+
 import styled, { css } from 'styled-components';
 
 import { media } from '@/shared/styles';
+import { InputVariant } from '@/shared/ui/Input';
 
-import { InputVariant } from '.';
+interface WrapperProps {
+  $fullWidth: boolean;
+}
 
 interface FieldProps {
   $hasError: boolean;
@@ -10,9 +15,14 @@ interface FieldProps {
   $variant: InputVariant;
 }
 
-interface InputProps {
-  $hasLeftIcon: boolean;
-  $hasRightElement: boolean;
+interface SelectProps {
+  $hasError: boolean;
+  $isDisabled: boolean;
+}
+
+interface ArrowProps {
+  $isOpen: boolean;
+  $isDisabled: boolean;
 }
 
 function getFieldVariantStyles(variant: InputVariant, isDisabled: boolean) {
@@ -33,16 +43,16 @@ function getFieldVariantStyles(variant: InputVariant, isDisabled: boolean) {
   `;
 }
 
-export const Wrapper = styled.div`
-  width: 100%;
+export const Wrapper = styled.div<WrapperProps>`
+  width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.xs6};
 `;
 
 export const Label = styled.label`
-  font-size: ${({ theme }) => theme.fontSize.md};
   color: ${({ theme }) => theme.text.secondary};
+  font-size: ${({ theme }) => theme.fontSize.md};
 
   @media ${media.tablet} {
     font-size: ${({ theme }) => theme.fontSize.sm};
@@ -53,19 +63,18 @@ export const Label = styled.label`
   }
 `;
 
-export const Field = styled.label<FieldProps>`
+export const Field = styled.div<FieldProps>`
   ${({ $variant, $isDisabled }) => getFieldVariantStyles($variant, $isDisabled)}
 
+  position: relative;
   width: 100%;
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs4};
   border: ${({ theme }) => theme.borderWidth.xs} solid;
   border-color: ${({ $hasError, theme }) =>
     $hasError ? theme.border.danger : theme.border.primary};
   border-radius: ${({ theme }) => theme.borderRadius.md};
-  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.md}`};
-  cursor: ${({ $isDisabled }) => ($isDisabled ? 'not-allowed' : 'text')};
+  cursor: ${({ $isDisabled }) => ($isDisabled ? 'not-allowed' : 'pointer')};
 
   transition:
     border-color ${({ theme }) => theme.transitionDuration.sm},
@@ -77,62 +86,69 @@ export const Field = styled.label<FieldProps>`
   }
 
   @media ${media.tablet} {
-    padding: ${({ theme }) => `${theme.spacing.xs2} ${theme.spacing.xs}`};
     border-radius: ${({ theme }) => theme.borderRadius.sm};
   }
 `;
 
-export const LeftIcon = styled.span`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: ${({ theme }) => theme.size.icon.sm};
-  height: ${({ theme }) => theme.size.icon.sm};
-  color: ${({ theme }) => theme.text.muted};
-
-  @media ${media.tablet} {
-    width: ${({ theme }) => theme.size.icon.xs};
-    height: ${({ theme }) => theme.size.icon.xs};
-  }
-`;
-
-export const RightElement = styled.span`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: ${({ theme }) => theme.size.icon.md};
-  height: ${({ theme }) => theme.size.icon.md};
-  color: ${({ theme }) => theme.text.secondary};
-
-  @media ${media.tablet} {
-    width: ${({ theme }) => theme.size.icon.sm};
-    height: ${({ theme }) => theme.size.icon.sm};
-  }
-`;
-
-export const Input = styled.input<InputProps>`
+export const Select = styled.select<SelectProps>`
   width: 100%;
   border: 0;
+  padding: ${({ theme }) =>
+    `${theme.spacing.xs} ${theme.spacing.xl6} ${theme.spacing.xs} ${theme.spacing.md}`};
   color: ${({ theme }) => theme.text.primary};
-  font-size: ${({ theme }) => theme.fontSize.md};
   background-color: transparent;
+  font-size: ${({ theme }) => theme.fontSize.md};
   outline: none;
-
-  &::placeholder {
-    color: ${({ theme }) => theme.text.muted};
-  }
+  cursor: ${({ $isDisabled }) => ($isDisabled ? 'not-allowed' : 'pointer')};
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 
   &:disabled {
     color: ${({ theme }) => theme.text.muted};
-    cursor: not-allowed;
+  }
+
+  option {
+    color: ${({ theme }) => theme.text.primary};
+    background-color: ${({ theme }) => theme.background.primary};
   }
 
   @media ${media.tablet} {
+    padding: ${({ theme }) =>
+      `${theme.spacing.xs2} ${theme.spacing.xl4} ${theme.spacing.xs2} ${theme.spacing.xs}`};
     font-size: ${({ theme }) => theme.fontSize.sm};
   }
 
   @media ${media.mobile} {
     font-size: ${({ theme }) => theme.fontSize.xs};
+  }
+`;
+
+export const Arrow = styled.span<ArrowProps>`
+  position: absolute;
+  top: 50%;
+  right: ${({ theme }) => theme.spacing.md};
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme, $isDisabled }) =>
+    $isDisabled ? theme.text.muted : theme.text.secondary};
+  pointer-events: none;
+
+  transform: translateY(-50%)
+    rotate(${({ $isOpen }) => ($isOpen ? '180deg' : '0deg')});
+
+  transition:
+    transform ${({ theme }) => theme.transitionDuration.sm},
+    color ${({ theme }) => theme.transitionDuration.sm};
+
+  svg {
+    width: ${({ theme }) => theme.size.icon.xs2};
+    height: ${({ theme }) => theme.size.icon.xs2};
+  }
+
+  @media ${media.tablet} {
+    right: ${({ theme }) => theme.spacing.xs};
   }
 `;
 

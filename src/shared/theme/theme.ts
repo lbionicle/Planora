@@ -18,6 +18,7 @@ export const theme = {
     background: 'transparent',
     backgroundHover: palette.blue[10],
     backgroundActive: palette.blue[20],
+    backgroundOverlay: palette.gray[60],
     deleted: {
       text: palette.red[100],
       background: palette.black[60],
@@ -126,6 +127,9 @@ export const theme = {
     disabled: {
       text: palette.black[10],
     },
+  },
+  fontFamily: {
+    inter: 'Inter, sans-serif',
   },
   size: {
     pagination: {

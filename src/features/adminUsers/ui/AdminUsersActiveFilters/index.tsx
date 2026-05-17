@@ -7,9 +7,7 @@ import {
   userStatusLabels,
 } from '@/entities/adminUser/model/constants';
 import { AdminUsersFilters } from '@/entities/adminUser/model/types';
-import { CrossIcon } from '@/shared/ui/Icons';
-
-import * as S from './styled';
+import ActiveFilters, { ActiveFilterItem } from '@/shared/ui/ActiveFilters';
 
 interface AdminUsersActiveFiltersProps {
   filters: AdminUsersFilters;
@@ -22,25 +20,23 @@ export default function AdminUsersActiveFilters({
   onRoleClear,
   onStatusClear,
 }: AdminUsersActiveFiltersProps): ReactNode {
-  if (!filters.role && !filters.status) {
-    return null;
+  const items: ActiveFilterItem[] = [];
+
+  if (filters.role) {
+    items.push({
+      key: 'role',
+      label: userRoleLabels[filters.role],
+      onClear: onRoleClear,
+    });
   }
 
-  return (
-    <S.Wrapper>
-      {filters.role && (
-        <S.Chip type="button" onClick={onRoleClear}>
-          {userRoleLabels[filters.role]}
-          <CrossIcon />
-        </S.Chip>
-      )}
+  if (filters.status) {
+    items.push({
+      key: 'status',
+      label: userStatusLabels[filters.status],
+      onClear: onStatusClear,
+    });
+  }
 
-      {filters.status && (
-        <S.Chip type="button" onClick={onStatusClear}>
-          {userStatusLabels[filters.status]}
-          <CrossIcon />
-        </S.Chip>
-      )}
-    </S.Wrapper>
-  );
+  return <ActiveFilters items={items} />;
 }

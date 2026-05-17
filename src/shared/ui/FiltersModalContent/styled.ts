@@ -2,9 +2,14 @@ import styled from 'styled-components';
 
 import { media } from '@/shared/styles';
 
-export const Content = styled.div`
-  display: flex;
-  flex-direction: column;
+interface ContentProps {
+  $columns: 1 | 2;
+}
+
+export const Content = styled.div<ContentProps>`
+  display: grid;
+  grid-template-columns: ${({ $columns }) =>
+    $columns === 2 ? 'repeat(2, minmax(0, 1fr))' : '1fr'};
   gap: ${({ theme }) => theme.spacing.lg};
 
   @media ${media.tablet} {
@@ -12,6 +17,7 @@ export const Content = styled.div`
   }
 
   @media ${media.mobile} {
+    grid-template-columns: 1fr;
     gap: ${({ theme }) => theme.spacing.sm};
   }
 `;
@@ -31,9 +37,11 @@ export const Section = styled.div`
 `;
 
 export const SectionTitle = styled.h3`
+  margin: 0;
   color: ${({ theme }) => theme.text.primary};
   font-size: ${({ theme }) => theme.fontSize.xl3};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
+  line-height: ${({ theme }) => theme.lineHeight.md};
 
   @media ${media.tablet} {
     font-size: ${({ theme }) => theme.fontSize.xl};
