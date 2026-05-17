@@ -2,6 +2,8 @@
 
 import styled from 'styled-components';
 
+import { media } from '@/shared/styles';
+
 interface ButtonProps {
   $isActive: boolean;
 }
@@ -13,6 +15,10 @@ export const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.xs7};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   background-color: ${({ theme }) => theme.action.info.background};
+
+  @media ${media.tablet} {
+    border-radius: ${({ theme }) => theme.borderRadius.sm};
+  }
 `;
 
 export const Button = styled.button<ButtonProps>`
@@ -44,5 +50,11 @@ export const Button = styled.button<ButtonProps>`
   &:disabled {
     background-color: ${({ theme }) => theme.action.disabled.background};
     color: ${({ theme }) => theme.action.disabled.text};
+  }
+
+  @media ${media.tablet} {
+    border-radius: ${({ theme }) => theme.borderRadius.sm};
+    padding: ${({ theme }) => `${theme.spacing.xs3} ${theme.spacing.xl2}`};
+    font-size: ${({ theme }) => theme.fontSize.xs};
   }
 `;

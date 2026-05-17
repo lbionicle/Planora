@@ -14,6 +14,7 @@ export const Card = styled.section`
 
   @media ${media.tablet} {
     padding: ${({ theme }) => theme.spacing.xl2};
+    border-radius: ${({ theme }) => theme.borderRadius.xl};
   }
 `;
 
@@ -21,4 +22,8 @@ export const Title = styled.h1`
   color: ${({ theme }) => theme.text.primary};
   font-size: ${({ theme }) => theme.fontSize.xl8};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
+
+  ${media.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.xl7};
+  }
 `;

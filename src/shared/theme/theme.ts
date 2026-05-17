@@ -5,16 +5,22 @@ export const theme = {
     primary: palette.black[100],
     secondary: palette.black[80],
     muted: palette.black[60],
+    accent: palette.blue[500],
   },
   background: {
     primary: palette.white[100],
     secondary: palette.lightGray[100],
+    muted: palette.gray[50],
   },
   fileUpload: {
     text: palette.blue[500],
     background: 'transparent',
     backgroundHover: palette.blue[10],
     backgroundActive: palette.blue[20],
+    deleted: {
+      text: palette.red[100],
+      background: palette.black[60],
+    },
   },
   action: {
     primary: {
@@ -80,7 +86,9 @@ export const theme = {
     },
   },
   border: {
-    primary: palette.gray[100],
+    primary: palette.gray[80],
+    secondary: palette.gray[60],
+    muted: palette.gray[40],
     accent: palette.blue[500],
     danger: palette.red[100],
     success: palette.green[100],
@@ -91,8 +99,18 @@ export const theme = {
     info: palette.blue[80],
     default: palette.black[40],
   },
+  scrollbar: {
+    track: 'transparent',
+    thumb: palette.black[30],
+    thumbHover: palette.black[40],
+  },
+  modal: {
+    background: palette.white[100],
+    backgroundOverlay: palette.black[10],
+  },
   container: {
     authForm: '428px',
+    page: '1440px',
   },
   lineHeight: {
     xs: 1,
@@ -101,13 +119,33 @@ export const theme = {
     lg: 1.5,
     xl: 1.6,
   },
+  pagination: {
+    width: '40px',
+    height: '40px',
+    disabled: {
+      text: palette.black[10],
+    },
+  },
   size: {
+    pagination: {
+      width: '44px',
+      height: '44px',
+    },
+    scrollbar: {
+      width: '2px',
+      height: '2px',
+    },
     icon: {
       xs: '16px',
       sm: '18px',
       md: '20px',
       lg: '22px',
       xl: '24px',
+      xl2: '28px',
+      xl3: '32px',
+      xl4: '36px',
+      xl5: '40px',
+      xl6: '44px',
     },
   },
   fontSize: {
