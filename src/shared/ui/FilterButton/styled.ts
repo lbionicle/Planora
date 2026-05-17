@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 import { media } from '@/shared/styles';
-import Button from '@/shared/ui/Button';
 
-export const FilterButton = styled(Button).attrs({
+import Button from '../Button';
+
+export const FilterActionButton = styled(Button).attrs({
   size: 'sm',
   colorScheme: 'accent',
 })`

@@ -15,13 +15,13 @@ import AdminUserEditModal from '@/features/adminUsers/ui/AdminUserEditModal';
 import AdminUsersActiveFilters from '@/features/adminUsers/ui/AdminUsersActiveFilters';
 import AdminUsersFiltersModal from '@/features/adminUsers/ui/AdminUsersFiltersModal';
 import { getApiErrorMessage, useDebouncedValue } from '@/shared/lib';
+import FilterButton from '@/shared/ui/FilterButton';
 import { FilterIcon } from '@/shared/ui/Icons';
 import PageLayout from '@/shared/ui/PageLayout';
 import PageToolbar from '@/shared/ui/PageToolbar';
 import PaginatedTable from '@/shared/ui/PaginatedTable';
 
 import { getColumns } from '../../model/usersTableColumns';
-import * as S from './styled';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
@@ -171,9 +171,9 @@ export default function AdminUsersPage(): ReactNode {
               onChange: handleSearchChange,
             }}
             action={
-              <S.FilterButton onClick={() => setIsFiltersOpen(true)}>
+              <FilterButton onClick={() => setIsFiltersOpen(true)}>
                 <FilterIcon />
-              </S.FilterButton>
+              </FilterButton>
             }
             bottom={
               <AdminUsersActiveFilters

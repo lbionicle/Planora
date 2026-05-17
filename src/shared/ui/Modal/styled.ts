@@ -15,53 +15,6 @@ interface BodyProps {
   $hasFooter: boolean;
 }
 
-function getBodyPaddingStyles(
-  bodyPadding: ModalBodyPadding,
-  hasHeader: boolean,
-  hasFooter: boolean,
-) {
-  if (bodyPadding === 'none') {
-    return css`
-      padding: 0;
-    `;
-  }
-
-  if (bodyPadding === 'full') {
-    return css`
-      padding: ${({ theme }) => theme.spacing.xl6};
-
-      @media ${media.tablet} {
-        padding: ${({ theme }) => theme.spacing.xl3};
-      }
-
-      @media ${media.mobile} {
-        padding: ${({ theme }) => theme.spacing.lg};
-      }
-    `;
-  }
-
-  return css`
-    padding: ${({ theme }) =>
-      `${hasHeader ? '0' : theme.spacing.xl6} ${theme.spacing.xl6} ${
-        hasFooter ? '0' : theme.spacing.xl6
-      } ${theme.spacing.xl6}`};
-
-    @media ${media.tablet} {
-      padding: ${({ theme }) =>
-        `${hasHeader ? '0' : theme.spacing.xl3} ${theme.spacing.xl3} ${
-          hasFooter ? '0' : theme.spacing.xl3
-        } ${theme.spacing.xl3}`};
-    }
-
-    @media ${media.mobile} {
-      padding: ${({ theme }) =>
-        `${hasHeader ? '0' : theme.spacing.lg} ${theme.spacing.lg} ${
-          hasFooter ? '0' : theme.spacing.lg
-        } ${theme.spacing.lg}`};
-    }
-  `;
-}
-
 function getSizeStyles(size: ModalSize) {
   const styles = {
     sm: css`
@@ -79,6 +32,35 @@ function getSizeStyles(size: ModalSize) {
   };
 
   return styles[size];
+}
+
+function getBodyPadding({
+  bodyPadding,
+  hasHeader,
+  hasFooter,
+  desktopX,
+  desktopFull,
+  desktopCompactBottom,
+}: {
+  bodyPadding: ModalBodyPadding;
+  hasHeader: boolean;
+  hasFooter: boolean;
+  desktopX: string;
+  desktopFull: string;
+  desktopCompactBottom: string;
+}) {
+  if (bodyPadding === 'none') {
+    return '0';
+  }
+
+  if (bodyPadding === 'full') {
+    return desktopFull;
+  }
+
+  const top = hasHeader ? '0' : desktopX;
+  const bottom = hasFooter ? desktopCompactBottom : desktopX;
+
+  return `${top} ${desktopX} ${bottom} ${desktopX}`;
 }
 
 export const Overlay = styled.div`
@@ -136,7 +118,7 @@ export const CloseButton = styled(Button).attrs({
 })`
   position: absolute;
   top: ${({ theme }) => theme.spacing.xl3};
-  right: ${({ theme }) => theme.spacing.xl3};
+  right: ${({ theme }) => theme.spacing.xl6};
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -144,12 +126,12 @@ export const CloseButton = styled(Button).attrs({
 
   @media ${media.tablet} {
     top: ${({ theme }) => theme.spacing.lg};
-    right: ${({ theme }) => theme.spacing.lg};
+    right: ${({ theme }) => theme.spacing.xl3};
   }
 
   @media ${media.mobile} {
     top: ${({ theme }) => theme.spacing.xs};
-    right: ${({ theme }) => theme.spacing.xs};
+    right: ${({ theme }) => theme.spacing.lg};
   }
 `;
 
@@ -187,15 +169,46 @@ export const Title = styled.h2`
 `;
 
 export const Body = styled.div<BodyProps>`
-  ${({ $bodyPadding, $hasHeader, $hasFooter }) =>
-    getBodyPaddingStyles($bodyPadding, $hasHeader, $hasFooter)}
-
   min-height: 0;
   flex: 1;
   overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: ${({ theme, $bodyPadding, $hasHeader, $hasFooter }) =>
+    getBodyPadding({
+      bodyPadding: $bodyPadding,
+      hasHeader: $hasHeader,
+      hasFooter: $hasFooter,
+      desktopX: theme.spacing.xl6,
+      desktopFull: theme.spacing.xl6,
+      desktopCompactBottom: theme.spacing.xl3,
+    })};
 
   ${thinScrollbar}
+
+  @media ${media.tablet} {
+    padding: ${({ theme, $bodyPadding, $hasHeader, $hasFooter }) =>
+      getBodyPadding({
+        bodyPadding: $bodyPadding,
+        hasHeader: $hasHeader,
+        hasFooter: $hasFooter,
+        desktopX: theme.spacing.xl3,
+        desktopFull: theme.spacing.xl3,
+        desktopCompactBottom: theme.spacing.xl2,
+      })};
+  }
+
+  @media ${media.mobile} {
+    padding: ${({ theme, $bodyPadding, $hasHeader, $hasFooter }) =>
+      getBodyPadding({
+        bodyPadding: $bodyPadding,
+        hasHeader: $hasHeader,
+        hasFooter: $hasFooter,
+        desktopX: theme.spacing.lg,
+        desktopFull: theme.spacing.lg,
+        desktopCompactBottom: theme.spacing.lg,
+      })};
+  }
 `;
 
 export const Footer = styled.div`
@@ -210,6 +223,6 @@ export const Footer = styled.div`
 
   @media ${media.mobile} {
     padding: ${({ theme }) =>
-      ` ${theme.spacing.xs2} ${theme.spacing.lg} ${theme.spacing.lg} ${theme.spacing.lg}`};
+      `${theme.spacing.xs2} ${theme.spacing.lg} ${theme.spacing.lg} ${theme.spacing.lg}`};
   }
 `;

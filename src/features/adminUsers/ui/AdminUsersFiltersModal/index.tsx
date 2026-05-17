@@ -1,5 +1,3 @@
-'use client';
-
 import { ReactNode, useState } from 'react';
 
 import {
@@ -10,10 +8,11 @@ import {
 import { AdminUsersFilters } from '@/entities/adminUser/model/types';
 import { UserRole, UserStatus } from '@/entities/user/model/types';
 import ActionButtons from '@/shared/ui/ActionButtons';
+import FiltersModalContent, {
+  FiltersModalSection,
+} from '@/shared/ui/FiltersModalContent';
 import Modal from '@/shared/ui/Modal';
 import RadioGroup, { RadioOption } from '@/shared/ui/RadioGroup';
-
-import * as S from './styled';
 
 type RoleFilterValue = UserRole | 'ALL';
 type StatusFilterValue = UserStatus | 'ALL';
@@ -80,6 +79,33 @@ export default function AdminUsersFiltersModal({
     onApply(filters);
   };
 
+  const sections: FiltersModalSection[] = [
+    {
+      key: 'role',
+      title: 'Роль пользователя',
+      content: (
+        <RadioGroup
+          name="admin-user-role"
+          value={getRoleValue(filters.role)}
+          options={roleOptions}
+          onChange={handleRoleChange}
+        />
+      ),
+    },
+    {
+      key: 'status',
+      title: 'Статус пользователя',
+      content: (
+        <RadioGroup
+          name="admin-user-status"
+          value={getStatusValue(filters.status)}
+          options={statusOptions}
+          onChange={handleStatusChange}
+        />
+      ),
+    },
+  ];
+
   return (
     <Modal
       isOpen={isOpen}
@@ -95,28 +121,7 @@ export default function AdminUsersFiltersModal({
         />
       }
     >
-      <S.Content>
-        <S.Section>
-          <S.SectionTitle>Роль пользователя</S.SectionTitle>
-          <RadioGroup
-            name="admin-user-role"
-            value={getRoleValue(filters.role)}
-            options={roleOptions}
-            onChange={handleRoleChange}
-          />
-        </S.Section>
-
-        <S.Section>
-          <S.SectionTitle>Статус пользователя</S.SectionTitle>
-
-          <RadioGroup
-            name="admin-user-status"
-            value={getStatusValue(filters.status)}
-            options={statusOptions}
-            onChange={handleStatusChange}
-          />
-        </S.Section>
-      </S.Content>
+      <FiltersModalContent sections={sections} />
     </Modal>
   );
 }

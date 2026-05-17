@@ -84,7 +84,6 @@ export default function Modal({
               <S.Title>{title}</S.Title>
             </S.Header>
           )}
-
           <S.Body
             $bodyPadding={bodyPadding}
             $hasHeader={Boolean(title)}
