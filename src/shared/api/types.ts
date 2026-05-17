@@ -1,10 +1,10 @@
-export type ApiSuccessResponse<T> = {
+export interface ApiSuccessResponse<T> {
   success: true;
   message: string;
   data: T;
-};
+}
 
-export type ApiErrorResponse = {
+export interface ApiErrorResponse {
   success: false;
   error: {
     code: string;
@@ -14,4 +14,4 @@ export type ApiErrorResponse = {
       message: string;
     }[];
   };
-};
+}

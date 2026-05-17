@@ -17,7 +17,10 @@ export const profileApi = baseApi.injectEndpoints({
         url: '/users/me/profile',
         method: 'GET',
       }),
-      providesTags: ['Profile'],
+      providesTags: [
+        { type: 'Profile', id: 'CURRENT' },
+        { type: 'User', id: 'CURRENT' },
+      ],
     }),
 
     updateCurrentProfile: builder.mutation<
@@ -29,7 +32,11 @@ export const profileApi = baseApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: ['Profile'],
+      invalidatesTags: [
+        { type: 'Profile', id: 'CURRENT' },
+        { type: 'User', id: 'CURRENT' },
+        { type: 'AdminUsers', id: 'LIST' },
+      ],
     }),
 
     uploadCurrentAvatar: builder.mutation<
@@ -47,7 +54,12 @@ export const profileApi = baseApi.injectEndpoints({
           body: formData,
         };
       },
-      invalidatesTags: ['Profile', 'Auth'],
+      invalidatesTags: [
+        { type: 'Profile', id: 'CURRENT' },
+        { type: 'Auth', id: 'ME' },
+        { type: 'User', id: 'CURRENT' },
+        { type: 'AdminUsers', id: 'LIST' },
+      ],
     }),
 
     deleteCurrentAvatar: builder.mutation<
@@ -58,7 +70,12 @@ export const profileApi = baseApi.injectEndpoints({
         url: '/users/me/avatar',
         method: 'DELETE',
       }),
-      invalidatesTags: ['Profile', 'Auth'],
+      invalidatesTags: [
+        { type: 'Profile', id: 'CURRENT' },
+        { type: 'Auth', id: 'ME' },
+        { type: 'User', id: 'CURRENT' },
+        { type: 'AdminUsers', id: 'LIST' },
+      ],
     }),
 
     changeCurrentPassword: builder.mutation<

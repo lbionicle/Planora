@@ -4,12 +4,14 @@ import { ArrowLeftIcon } from './ArrowLeft';
 import { ArrowRightIcon } from './ArrowRight';
 import { CloseFillIcon } from './CloseFill';
 import { CrossIcon } from './Cross';
+import { EditIcon } from './Edit';
 import { EmailIcon } from './Email';
 import { EventsIcon } from './Events';
 import { EventsFillIcon } from './EventsFill';
 import { EyeIcon } from './Eye';
 import { EyeOffIcon } from './EyeOff';
 import { FileIcon } from './File';
+import { FilterIcon } from './Filter';
 import { HeartIcon } from './Heart';
 import { HeartFillIcon } from './HeartFill';
 import { LockIcon } from './Lock';
@@ -33,12 +35,14 @@ export {
   ArrowRightIcon,
   CloseFillIcon,
   CrossIcon,
+  EditIcon,
   EmailIcon,
   EventsFillIcon,
   EventsIcon,
   EyeIcon,
   EyeOffIcon,
   FileIcon,
+  FilterIcon,
   HeartFillIcon,
   HeartIcon,
   LockIcon,

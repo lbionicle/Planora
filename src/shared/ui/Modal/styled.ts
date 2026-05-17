@@ -3,10 +3,63 @@ import styled, { css } from 'styled-components';
 import { media, thinScrollbar } from '@/shared/styles';
 
 import Button from '../Button';
-import { ModalSize } from '.';
+import { ModalBodyPadding, ModalSize } from '.';
 
 interface DialogProps {
   $size: ModalSize;
+}
+
+interface BodyProps {
+  $bodyPadding: ModalBodyPadding;
+  $hasHeader: boolean;
+  $hasFooter: boolean;
+}
+
+function getBodyPaddingStyles(
+  bodyPadding: ModalBodyPadding,
+  hasHeader: boolean,
+  hasFooter: boolean,
+) {
+  if (bodyPadding === 'none') {
+    return css`
+      padding: 0;
+    `;
+  }
+
+  if (bodyPadding === 'full') {
+    return css`
+      padding: ${({ theme }) => theme.spacing.xl6};
+
+      @media ${media.tablet} {
+        padding: ${({ theme }) => theme.spacing.xl3};
+      }
+
+      @media ${media.mobile} {
+        padding: ${({ theme }) => theme.spacing.lg};
+      }
+    `;
+  }
+
+  return css`
+    padding: ${({ theme }) =>
+      `${hasHeader ? '0' : theme.spacing.xl6} ${theme.spacing.xl6} ${
+        hasFooter ? '0' : theme.spacing.xl6
+      } ${theme.spacing.xl6}`};
+
+    @media ${media.tablet} {
+      padding: ${({ theme }) =>
+        `${hasHeader ? '0' : theme.spacing.xl3} ${theme.spacing.xl3} ${
+          hasFooter ? '0' : theme.spacing.xl3
+        } ${theme.spacing.xl3}`};
+    }
+
+    @media ${media.mobile} {
+      padding: ${({ theme }) =>
+        `${hasHeader ? '0' : theme.spacing.lg} ${theme.spacing.lg} ${
+          hasFooter ? '0' : theme.spacing.lg
+        } ${theme.spacing.lg}`};
+    }
+  `;
 }
 
 function getSizeStyles(size: ModalSize) {
@@ -55,16 +108,15 @@ export const Dialog = styled.div<DialogProps>`
   ${({ $size }) => getSizeStyles($size)}
 
   position: relative;
+  display: flex;
   width: 100%;
   max-height: calc(100dvh - ${({ theme }) => theme.spacing.xl6});
-  overflow-x: hidden;
-  overflow-y: auto;
+  flex-direction: column;
+  overflow: hidden;
   z-index: ${({ theme }) => theme.zIndex.modal};
   border-radius: ${({ theme }) => theme.borderRadius.xl3};
   background-color: ${({ theme }) => theme.modal.background};
   box-shadow: ${({ theme }) => theme.shadow.default};
-
-  ${thinScrollbar}
 
   @media ${media.tablet} {
     max-height: calc(100dvh - ${({ theme }) => theme.spacing.xl3});
@@ -80,10 +132,11 @@ export const Dialog = styled.div<DialogProps>`
 export const CloseButton = styled(Button).attrs({
   size: 'xs',
   colorScheme: 'muted',
+  type: 'button',
 })`
   position: absolute;
   top: ${({ theme }) => theme.spacing.xl3};
-  right: ${({ theme }) => theme.spacing.xl6};
+  right: ${({ theme }) => theme.spacing.xl3};
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -91,27 +144,28 @@ export const CloseButton = styled(Button).attrs({
 
   @media ${media.tablet} {
     top: ${({ theme }) => theme.spacing.lg};
-    right: ${({ theme }) => theme.spacing.xl3};
+    right: ${({ theme }) => theme.spacing.lg};
   }
 
   @media ${media.mobile} {
     top: ${({ theme }) => theme.spacing.xs};
-    right: ${({ theme }) => theme.spacing.lg};
+    right: ${({ theme }) => theme.spacing.xs};
   }
 `;
 
 export const Header = styled.div`
+  flex-shrink: 0;
   padding: ${({ theme }) =>
-    `${theme.spacing.xl6} ${theme.spacing.xl6} 0 ${theme.spacing.xl6}`};
+    `${theme.spacing.xl6} ${theme.spacing.xl6} ${theme.spacing.xl2} ${theme.spacing.xl6}`};
 
   @media ${media.tablet} {
     padding: ${({ theme }) =>
-      `${theme.spacing.xl3} ${theme.spacing.xl3} 0 ${theme.spacing.xl3}`};
+      `${theme.spacing.xl3} ${theme.spacing.xl3} ${theme.spacing.md} ${theme.spacing.xl3}`};
   }
 
   @media ${media.mobile} {
     padding: ${({ theme }) =>
-      `${theme.spacing.lg} ${theme.spacing.lg} 0 ${theme.spacing.lg}`};
+      `${theme.spacing.lg} ${theme.spacing.lg} ${theme.spacing.xs2} ${theme.spacing.lg}`};
   }
 `;
 
@@ -132,66 +186,30 @@ export const Title = styled.h2`
   }
 `;
 
-export const Body = styled.div`
-  padding: ${({ theme }) => theme.spacing.xl6};
+export const Body = styled.div<BodyProps>`
+  ${({ $bodyPadding, $hasHeader, $hasFooter }) =>
+    getBodyPaddingStyles($bodyPadding, $hasHeader, $hasFooter)}
 
-  @media ${media.tablet} {
-    padding: ${({ theme }) => theme.spacing.xl3};
-  }
+  min-height: 0;
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
 
-  @media ${media.mobile} {
-    padding: ${({ theme }) => theme.spacing.lg};
-  }
+  ${thinScrollbar}
 `;
 
 export const Footer = styled.div`
+  flex-shrink: 0;
   padding: ${({ theme }) =>
-    `0 ${theme.spacing.xl6} ${theme.spacing.xl6} ${theme.spacing.xl6}`};
+    `${theme.spacing.xl2} ${theme.spacing.xl6} ${theme.spacing.xl6} ${theme.spacing.xl6}`};
 
   @media ${media.tablet} {
     padding: ${({ theme }) =>
-      `0 ${theme.spacing.xl3} ${theme.spacing.xl3} ${theme.spacing.xl3}`};
+      `${theme.spacing.md} ${theme.spacing.xl3} ${theme.spacing.xl3} ${theme.spacing.xl3}`};
   }
 
   @media ${media.mobile} {
     padding: ${({ theme }) =>
-      `0 ${theme.spacing.lg} ${theme.spacing.lg} ${theme.spacing.lg}`};
-  }
-`;
-
-export const SplitLayout = styled.div`
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 420px;
-  min-height: 620px;
-
-  @media ${media.tablet} {
-    grid-template-columns: 1fr;
-  }
-`;
-
-export const SplitMain = styled.div`
-  min-width: 0;
-  padding: ${({ theme }) => theme.spacing.xl6};
-
-  @media ${media.tablet} {
-    padding: ${({ theme }) => theme.spacing.xl3};
-  }
-
-  @media ${media.mobile} {
-    padding: ${({ theme }) => theme.spacing.lg};
-  }
-`;
-
-export const SplitAside = styled.aside`
-  min-width: 0;
-  padding: ${({ theme }) => theme.spacing.xl6};
-  background: ${({ theme }) => theme.background.secondary};
-
-  @media ${media.tablet} {
-    padding: ${({ theme }) => theme.spacing.xl3};
-  }
-
-  @media ${media.mobile} {
-    padding: ${({ theme }) => theme.spacing.lg};
+      ` ${theme.spacing.xs2} ${theme.spacing.lg} ${theme.spacing.lg} ${theme.spacing.lg}`};
   }
 `;

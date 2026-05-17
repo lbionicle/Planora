@@ -16,27 +16,35 @@ interface PageToolbarSearch {
 interface PageToolbarProps {
   search?: PageToolbarSearch;
   action?: ReactNode;
+  bottom?: ReactNode;
 }
 
 export default function PageToolbar({
   search,
   action,
+  bottom,
 }: PageToolbarProps): ReactNode {
-  if (!search && !action) {
+  if (!search && !action && !bottom) {
     return null;
   }
 
   return (
-    <S.Toolbar>
-      {search && (
-        <SearchInput
-          value={search.value}
-          placeholder={search.placeholder}
-          onChange={search.onChange}
-        />
+    <S.Wrapper>
+      {(search || action) && (
+        <S.Toolbar>
+          {search && (
+            <SearchInput
+              value={search.value}
+              placeholder={search.placeholder}
+              onChange={search.onChange}
+            />
+          )}
+
+          {action}
+        </S.Toolbar>
       )}
 
-      {action}
-    </S.Toolbar>
+      {bottom && <S.Bottom>{bottom}</S.Bottom>}
+    </S.Wrapper>
   );
 }

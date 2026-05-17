@@ -1,0 +1,44 @@
+import styled from 'styled-components';
+
+import { media, thinScrollbar } from '@/shared/styles';
+
+export const Wrapper = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-y: hidden;
+  overflow-x: auto;
+  gap: ${({ theme }) => theme.spacing.xs4};
+
+  ${thinScrollbar}
+`;
+
+export const Chip = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs2};
+  padding: ${({ theme }) => `${theme.spacing.xs4} ${theme.spacing.xs3}`};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  color: ${({ theme }) => theme.text.accent};
+  background-color: ${({ theme }) => theme.action.info.background};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+
+  &:hover:not(:disabled) {
+    background-color: ${({ theme }) => theme.action.info.backgroundHover};
+  }
+
+  &:active:not(:disabled) {
+    background-color: ${({ theme }) => theme.action.info.backgroundActive};
+  }
+
+  svg {
+    flex-shrink: 0;
+    width: ${({ theme }) => theme.size.icon.xs2};
+    height: ${({ theme }) => theme.size.icon.xs2};
+  }
+
+  @media ${media.tablet} {
+    padding: ${({ theme }) => `${theme.spacing.xs4} ${theme.spacing.xs3}`};
+    gap: ${({ theme }) => theme.spacing.xs4};
+  }
+`;
