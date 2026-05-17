@@ -34,7 +34,7 @@ export function getColumns({
     },
     {
       accessorKey: 'company_name',
-      header: 'Наименование',
+      header: 'Название компании',
       size: 180,
     },
     {
@@ -44,7 +44,7 @@ export function getColumns({
     },
     {
       accessorKey: 'created_at',
-      header: 'Дата подачи заявки',
+      header: 'Дата подачи',
       size: 180,
       cell: ({ row }) => formatDateTime(row.original.created_at),
     },

@@ -17,15 +17,21 @@ interface InputProps {
   $hasRightElement: boolean;
 }
 
-function getFieldVariantStyles(variant: InputVariant) {
+function getFieldVariantStyles(variant: InputVariant, isDisabled: boolean) {
+  if (isDisabled) {
+    return css`
+      background-color: ${({ theme }) => theme.background.muted};
+    `;
+  }
+
   if (variant === 'default') {
     return css`
-      background: ${({ theme }) => theme.background.primary};
+      background-color: ${({ theme }) => theme.background.primary};
     `;
   }
 
   return css`
-    background: transparent;
+    background-color: transparent;
   `;
 }
 
@@ -50,7 +56,7 @@ export const Label = styled.label`
 `;
 
 export const Field = styled.label<FieldProps>`
-  ${({ $variant }) => getFieldVariantStyles($variant)}
+  ${({ $variant, $isDisabled }) => getFieldVariantStyles($variant, $isDisabled)}
 
   width: 100%;
   display: flex;
@@ -65,7 +71,7 @@ export const Field = styled.label<FieldProps>`
 
   transition:
     border-color ${({ theme }) => theme.transitionDuration.sm},
-    background ${({ theme }) => theme.transitionDuration.sm};
+    background-color ${({ theme }) => theme.transitionDuration.sm};
 
   &:focus-within {
     border-color: ${({ $hasError, theme }) =>

@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     styledComponents: true,
   },
   images: {
+    dangerouslyAllowLocalIP: true,
     remotePatterns: [
       {
         protocol: 'http',

@@ -8,7 +8,7 @@ import Button from '@/shared/ui/Button';
 export const DownloadButton = styled.button`
   padding: 0;
   border: 0;
-  color: ${({ theme }) => theme.action.secondary.text};
+  color: ${({ theme }) => theme.text.accent};
   background: transparent;
   font-size: ${({ theme }) => theme.fontSize.sm};
   line-height: ${({ theme }) => theme.lineHeight.md};

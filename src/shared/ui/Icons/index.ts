@@ -21,6 +21,7 @@ import { SearchIcon } from './Search';
 import { SuccessFillIcon } from './SuccessFill';
 import { TicketIcon } from './Ticket';
 import { TicketFillIcon } from './TicketFill';
+import { TrashIcon } from './Trash';
 import { UnLockIcon } from './UnLock';
 import { UsersIcon } from './Users';
 import { UsersFillIcon } from './UsersFill';
@@ -49,6 +50,7 @@ export {
   SuccessFillIcon,
   TicketFillIcon,
   TicketIcon,
+  TrashIcon,
   UnLockIcon,
   UsersFillIcon,
   UsersIcon,

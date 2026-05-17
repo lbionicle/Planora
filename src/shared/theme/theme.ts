@@ -10,12 +10,17 @@ export const theme = {
   background: {
     primary: palette.white[100],
     secondary: palette.lightGray[100],
+    muted: palette.gray[50],
   },
   fileUpload: {
     text: palette.blue[500],
     background: 'transparent',
     backgroundHover: palette.blue[10],
     backgroundActive: palette.blue[20],
+    deleted: {
+      text: palette.red[100],
+      background: palette.black[60],
+    },
   },
   action: {
     primary: {
@@ -98,6 +103,10 @@ export const theme = {
     track: 'transparent',
     thumb: palette.black[30],
     thumbHover: palette.black[40],
+  },
+  modal: {
+    background: palette.white[100],
+    backgroundOverlay: palette.black[10],
   },
   container: {
     authForm: '428px',

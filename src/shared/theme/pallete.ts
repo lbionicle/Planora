@@ -27,6 +27,7 @@ export const palette = {
     100: '#D8DBDD',
     80: hexWithOpacity('#D8DBDD', 80),
     60: hexWithOpacity('#D8DBDD', 60),
+    50: hexWithOpacity('#D8DBDD', 50),
     40: hexWithOpacity('#D8DBDD', 40),
     20: hexWithOpacity('#D8DBDD', 20),
   },
