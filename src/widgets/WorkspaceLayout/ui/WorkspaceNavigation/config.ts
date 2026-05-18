@@ -74,7 +74,7 @@ export const organizerNavigationItems: NavigationItem[] = [
 export const participantNavigationItems: NavigationItem[] = [
   {
     label: 'Мероприятия',
-    href: routes.organizer.events,
+    href: routes.public.events,
     Icon: EventsIcon,
     ActiveIcon: EventsFillIcon,
   },
