@@ -15,7 +15,7 @@ export const routes = {
   },
 
   participant: {
-    root: '/participant',
+    root: '/',
     favorites: '/participant/favorites',
     tickets: '/participant/tickets',
   },
@@ -23,8 +23,6 @@ export const routes = {
   organizer: {
     root: '/organizer',
     events: '/organizer/events',
-    createEvent: '/organizer/events/create',
-    invitations: '/organizer/invitations',
     analytics: '/organizer/analytics',
   },
 
@@ -44,11 +42,23 @@ export const roleHomeRoutes: Record<UserRole, string> = {
 
 export const authRoutes = [routes.auth.signIn, routes.auth.signUp] as const;
 
-export const participantRoutes = [routes.participant.root] as const;
+export const participantRoutes = [
+  routes.participant.favorites,
+  routes.participant.tickets,
+] as const;
 
-export const organizerRoutes = [routes.organizer.root] as const;
+export const organizerRoutes = [
+  routes.organizer.root,
+  routes.organizer.events,
+  routes.organizer.analytics,
+] as const;
 
-export const adminRoutes = [routes.admin.root] as const;
+export const adminRoutes = [
+  routes.admin.root,
+  routes.admin.requests,
+  routes.admin.users,
+  routes.admin.analytics,
+] as const;
 
 export const protectedRoutes = [
   ...participantRoutes,

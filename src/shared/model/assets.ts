@@ -6,4 +6,8 @@ export const assets = {
   events: {
     eventFallback: '/images/events/event-fallback.svg',
   },
+
+  map: {
+    mapStub: '/images/stub/map.webp',
+  },
 } as const;

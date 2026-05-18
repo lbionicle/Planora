@@ -1,5 +1,7 @@
 export * from './capitalizeFirstLetter';
 export * from './formatDateTime';
+export * from './formatEventDetailsDate';
+export * from './formatEventSalesEndDate';
 export * from './getApiErrorMessage';
 export * from './getUserAvatarSrc';
 export * from './hexWithOpacity';

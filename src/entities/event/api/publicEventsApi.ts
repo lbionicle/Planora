@@ -1,4 +1,5 @@
 import {
+  EventDetail,
   EventsListResponse,
   PublicEventsListRequest,
 } from '@/entities/event/model/types';
@@ -34,7 +35,18 @@ export const publicEventsApi = baseApi.injectEndpoints({
       }),
       providesTags: ['PublicEvents'],
     }),
+
+    getPublicEvent: builder.query<ApiSuccessResponse<EventDetail>, string>({
+      query: (publicId) => ({
+        url: `/events/${publicId}`,
+        method: 'GET',
+      }),
+      providesTags: (_result, _error, publicId) => [
+        { type: 'PublicEvents', id: publicId },
+      ],
+    }),
   }),
 });
 
-export const { useGetPublicEventsQuery } = publicEventsApi;
+export const { useGetPublicEventsQuery, useGetPublicEventQuery } =
+  publicEventsApi;

@@ -1,6 +1,6 @@
 import { capitalizeFirstLetter } from '@/shared/lib';
 
-export function formatEventCardDate(value: string): string {
+export function formatEventDetailsDate(value: string): string {
   const date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {
