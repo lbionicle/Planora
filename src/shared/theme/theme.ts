@@ -87,6 +87,14 @@ export const theme = {
       border: palette.gray[100],
     },
   },
+  accordion: {
+    text: palette.black[100],
+    textSecondary: palette.black[80],
+    textMuted: palette.black[60],
+    textSelected: palette.blue[500],
+    background: palette.white[100],
+    backgroundSelected: palette.skyBlue[20],
+  },
   border: {
     primary: palette.gray[80],
     secondary: palette.gray[60],
@@ -109,6 +117,14 @@ export const theme = {
   modal: {
     background: palette.white[100],
     backgroundOverlay: palette.black[10],
+  },
+  eventInfo: {
+    icon: palette.black[40],
+    text: palette.black[80],
+  },
+  carousel: {
+    activeDot: palette.white[80],
+    dot: palette.gray[60],
   },
   container: {
     authForm: '428px',

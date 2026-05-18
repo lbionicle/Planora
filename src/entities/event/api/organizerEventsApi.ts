@@ -38,13 +38,13 @@ export const organizerEventsApi = baseApi.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              { type: 'Events', id: 'ORGANIZER_LIST' },
+              { type: 'OrganizerEvents', id: 'ORGANIZER_LIST' },
               ...result.data.items.map((event) => ({
-                type: 'Events' as const,
+                type: 'OrganizerEvents' as const,
                 id: event.id,
               })),
             ]
-          : [{ type: 'Events', id: 'ORGANIZER_LIST' }],
+          : [{ type: 'OrganizerEvents', id: 'ORGANIZER_LIST' }],
     }),
 
     getOrganizerEvent: builder.query<ApiSuccessResponse<EventDetail>, string>({
@@ -53,7 +53,7 @@ export const organizerEventsApi = baseApi.injectEndpoints({
         method: 'GET',
       }),
       providesTags: (_result, _error, eventId) => [
-        { type: 'Events', id: eventId },
+        { type: 'OrganizerEvents', id: eventId },
       ],
     }),
 
@@ -66,7 +66,10 @@ export const organizerEventsApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: [{ type: 'Events', id: 'ORGANIZER_LIST' }],
+      invalidatesTags: [
+        { type: 'OrganizerEvents', id: 'ORGANIZER_LIST' },
+        'PublicEvents',
+      ],
     }),
 
     updateOrganizerEvent: builder.mutation<
@@ -79,8 +82,9 @@ export const organizerEventsApi = baseApi.injectEndpoints({
         body,
       }),
       invalidatesTags: (_result, _error, { eventId }) => [
-        { type: 'Events', id: eventId },
-        { type: 'Events', id: 'ORGANIZER_LIST' },
+        { type: 'OrganizerEvents', id: eventId },
+        { type: 'OrganizerEvents', id: 'ORGANIZER_LIST' },
+        'PublicEvents',
       ],
     }),
 
@@ -90,8 +94,10 @@ export const organizerEventsApi = baseApi.injectEndpoints({
         method: 'DELETE',
       }),
       invalidatesTags: (_result, _error, eventId) => [
-        { type: 'Events', id: eventId },
-        { type: 'Events', id: 'ORGANIZER_LIST' },
+        { type: 'OrganizerEvents', id: eventId },
+        { type: 'OrganizerEvents', id: 'ORGANIZER_LIST' },
+        'PublicEvents',
+        'ParticipantFavorites',
       ],
     }),
 
@@ -111,8 +117,9 @@ export const organizerEventsApi = baseApi.injectEndpoints({
         };
       },
       invalidatesTags: (_result, _error, { eventId }) => [
-        { type: 'Events', id: eventId },
-        { type: 'Events', id: 'ORGANIZER_LIST' },
+        { type: 'OrganizerEvents', id: eventId },
+        { type: 'OrganizerEvents', id: 'ORGANIZER_LIST' },
+        'PublicEvents',
       ],
     }),
 
@@ -125,8 +132,9 @@ export const organizerEventsApi = baseApi.injectEndpoints({
         method: 'DELETE',
       }),
       invalidatesTags: (_result, _error, eventId) => [
-        { type: 'Events', id: eventId },
-        { type: 'Events', id: 'ORGANIZER_LIST' },
+        { type: 'OrganizerEvents', id: eventId },
+        { type: 'OrganizerEvents', id: 'ORGANIZER_LIST' },
+        'PublicEvents',
       ],
     }),
   }),

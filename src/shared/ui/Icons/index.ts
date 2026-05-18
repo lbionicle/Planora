@@ -3,6 +3,7 @@ import { AnalyticsFillIcon } from './AnalyticsFill';
 import { ArrowBottomIcon } from './ArrowBottom';
 import { ArrowLeftIcon } from './ArrowLeft';
 import { ArrowRightIcon } from './ArrowRight';
+import { CalendarIcon } from './Calendar';
 import { CloseFillIcon } from './CloseFill';
 import { CrossIcon } from './Cross';
 import { EditIcon } from './Edit';
@@ -15,6 +16,7 @@ import { FileIcon } from './File';
 import { FilterIcon } from './Filter';
 import { HeartIcon } from './Heart';
 import { HeartFillIcon } from './HeartFill';
+import { LocationIcon } from './Location';
 import { LockIcon } from './Lock';
 import { LogoIcon } from './Logo';
 import { LogoutIcon } from './Logout';
@@ -23,6 +25,7 @@ import { PlusIcon } from './Plus';
 import { RequestsIcon } from './Requests';
 import { RequestsFillIcon } from './RequestsFill';
 import { SearchIcon } from './Search';
+import { ShareIcon } from './Share';
 import { SuccessFillIcon } from './SuccessFill';
 import { TicketIcon } from './Ticket';
 import { TicketFillIcon } from './TicketFill';
@@ -37,6 +40,7 @@ export {
   ArrowBottomIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
+  CalendarIcon,
   CloseFillIcon,
   CrossIcon,
   EditIcon,
@@ -49,6 +53,7 @@ export {
   FilterIcon,
   HeartFillIcon,
   HeartIcon,
+  LocationIcon,
   LockIcon,
   LogoIcon,
   LogoutIcon,
@@ -57,6 +62,7 @@ export {
   RequestsFillIcon,
   RequestsIcon,
   SearchIcon,
+  ShareIcon,
   SuccessFillIcon,
   TicketFillIcon,
   TicketIcon,
