@@ -65,6 +65,16 @@ export interface EventsListResponse {
   };
 }
 
+export interface PublicEventsListRequest {
+  page: number;
+  limit: number;
+  search?: string;
+  category?: EventCategory | null;
+  format?: EventFormat | null;
+  date_from?: string;
+  date_to?: string;
+}
+
 export interface EventsListRequest {
   page: number;
   limit: number;
