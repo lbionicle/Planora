@@ -12,10 +12,10 @@ import {
   selectIsAuthInitialized,
 } from '@/features/auth/model/selectors';
 import ProfileModal from '@/features/profile/ui/ProfileModal';
-import { getUserAvatarSrc } from '@/lib';
 import { baseApi } from '@/shared/api/baseApi';
 import {
   getApiErrorMessage,
+  getUserAvatarSrc,
   useAppDispatch,
   useAppSelector,
 } from '@/shared/lib';
