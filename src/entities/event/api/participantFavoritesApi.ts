@@ -6,16 +6,26 @@ interface FavoriteEventIdsResponse {
   event_ids: string[];
 }
 
+interface FavoriteEventsRequest {
+  page: number;
+  limit: number;
+  search?: string;
+}
+
 export const participantFavoritesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getParticipantFavoriteEvents: builder.query<
       ApiSuccessResponse<EventsListResponse>,
-      { page: number; limit: number }
+      FavoriteEventsRequest
     >({
-      query: ({ page, limit }) => ({
+      query: ({ page, limit, search }) => ({
         url: '/participant/favorites',
         method: 'GET',
-        params: { page, limit },
+        params: {
+          page,
+          limit,
+          search: search || undefined,
+        },
       }),
       providesTags: ['ParticipantFavorites'],
     }),
