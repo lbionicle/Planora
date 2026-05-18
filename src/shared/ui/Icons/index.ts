@@ -21,6 +21,7 @@ import { LockIcon } from './Lock';
 import { LogoIcon } from './Logo';
 import { LogoutIcon } from './Logout';
 import { MinusIcon } from './Minus';
+import { OrganizerIcon } from './Organizer';
 import { PlusIcon } from './Plus';
 import { RequestsIcon } from './Requests';
 import { RequestsFillIcon } from './RequestsFill';
@@ -58,6 +59,7 @@ export {
   LogoIcon,
   LogoutIcon,
   MinusIcon,
+  OrganizerIcon,
   PlusIcon,
   RequestsFillIcon,
   RequestsIcon,

@@ -21,9 +21,10 @@ export const baseApi = createApi({
     'OrganizerEvents',
     'PublicEvents',
     'ParticipantFavorites',
+    'ParticipantRegistrations',
   ],
-  refetchOnMountOrArgChange: true,
-  refetchOnFocus: true,
-  refetchOnReconnect: true,
+  // refetchOnMountOrArgChange: true,
+  // refetchOnFocus: true,
+  // refetchOnReconnect: true,
   endpoints: () => ({}),
 });

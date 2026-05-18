@@ -10,7 +10,7 @@ import {
 } from 'react';
 import Image from 'next/image';
 
-import { getUserAvatarSrc } from '@/lib';
+import { getUserAvatarSrc } from '@/shared/lib';
 import { TrashIcon } from '@/shared/ui/Icons';
 
 import * as S from './styled';

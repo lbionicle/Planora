@@ -5,12 +5,13 @@ import Image from 'next/image';
 
 import { getEventImageSrc } from '@/entities/event/lib/getEventImageSrc';
 import { EventListItem } from '@/entities/event/model/types';
+import { formatEventDetailsDate } from '@/shared/lib';
 import { assets } from '@/shared/model/assets';
 import { routes } from '@/shared/model/routes';
 import { CalendarIcon, LocationIcon } from '@/shared/ui/Icons';
 
-import { formatEventCardDate } from '../../lib';
 import EventCardActions from '../EventCardActions';
+import EventInfoList from '../EventInfoList';
 import * as S from './styled';
 
 interface EventCardProps {
@@ -46,21 +47,25 @@ export default function EventCard({
       <S.Content>
         <S.Title>{event.title}</S.Title>
 
-        <S.InfoList>
-          <S.InfoItem>
-            <S.InfoItemIcon>
-              <CalendarIcon />
-            </S.InfoItemIcon>
-            {formatEventCardDate(event.starts_at)}
-          </S.InfoItem>
-          <S.InfoItem>
-            <S.InfoItemIcon>
-              <LocationIcon />
-            </S.InfoItemIcon>
-            {event.location}
-          </S.InfoItem>
-          <S.InfoItem>{event.is_free ? 'Бесплатное' : 'Платное'}</S.InfoItem>
-        </S.InfoList>
+        <EventInfoList
+          items={[
+            {
+              key: 'date',
+              icon: <CalendarIcon />,
+              text: formatEventDetailsDate(event.starts_at),
+            },
+            {
+              key: 'location',
+              icon: <LocationIcon />,
+              text: event.location,
+              title: event.location,
+            },
+            {
+              key: 'price',
+              text: event.is_free ? 'Бесплатное' : 'Платное',
+            },
+          ]}
+        />
       </S.Content>
 
       <EventCardActions

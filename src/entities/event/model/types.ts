@@ -46,6 +46,8 @@ export interface EventDetail extends EventListItem {
   organizer_id: string;
   organizer_name: string;
   description: string;
+  registered_tickets_count: number;
+  available_tickets_count: number;
   country: string | null;
   region: string | null;
   city: string | null;
