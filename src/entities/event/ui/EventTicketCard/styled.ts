@@ -12,6 +12,7 @@ const IMAGE_HEIGHT = {
 };
 
 export const Card = styled.article`
+  min-width: 0;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -67,6 +68,7 @@ export const ImageWrapper = styled.div`
 `;
 
 export const Content = styled.div`
+  min-width: 0;
   display: grid;
   grid-template: 1fr / 1fr auto;
   gap: ${({ theme }) => theme.spacing.lg};
@@ -81,12 +83,14 @@ export const Content = styled.div`
 `;
 
 export const CardInfo = styled.div`
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const Title = styled.h3`
+  min-width: 0;
   color: ${({ theme }) => theme.text.primary};
   font-size: ${({ theme }) => theme.fontSize.lg};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
@@ -122,9 +126,12 @@ export const ContactLink = styled(Link)`
   background-color: transparent;
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
   text-decoration: none;
-  text-decoration: underline;
-  text-underline-offset: ${({ theme }) => theme.spacing.xs7};
   cursor: pointer;
+
+  &:hover:not(:disabled) {
+    text-decoration: underline;
+    text-underline-offset: ${({ theme }) => theme.spacing.xs7};
+  }
 
   @media ${media.tablet} {
     padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.xl4}`};

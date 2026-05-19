@@ -6,6 +6,7 @@ import { ArrowRightIcon } from './ArrowRight';
 import { CalendarIcon } from './Calendar';
 import { CloseFillIcon } from './CloseFill';
 import { CrossIcon } from './Cross';
+import { DownloadIcon } from './Download';
 import { EditIcon } from './Edit';
 import { EmailIcon } from './Email';
 import { EventsIcon } from './Events';
@@ -44,6 +45,7 @@ export {
   CalendarIcon,
   CloseFillIcon,
   CrossIcon,
+  DownloadIcon,
   EditIcon,
   EmailIcon,
   EventsFillIcon,
