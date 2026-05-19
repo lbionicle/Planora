@@ -22,6 +22,8 @@ export const baseApi = createApi({
     'PublicEvents',
     'ParticipantFavorites',
     'ParticipantRegistrations',
+    'OrganizerAnalytics',
+    'AdminAnalytics',
   ],
   // refetchOnMountOrArgChange: true,
   // refetchOnFocus: true,

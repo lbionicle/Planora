@@ -3,7 +3,9 @@ import { palette } from './pallete';
 export const theme = {
   text: {
     primary: palette.black[100],
+    inversion: palette.white[100],
     secondary: palette.black[80],
+    secondaryInversion: palette.white[80],
     muted: palette.black[60],
     accent: palette.blue[500],
   },
@@ -125,6 +127,31 @@ export const theme = {
   carousel: {
     activeDot: palette.white[80],
     dot: palette.gray[60],
+  },
+  analytics: {
+    card: {
+      default: {
+        background: palette.white[100],
+        border: palette.gray[60],
+      },
+      soft: {
+        background: palette.skyBlue[20],
+        border: palette.skyBlue[20],
+      },
+      accent: {
+        background: palette.blue[500],
+        border: palette.blue[500],
+      },
+    },
+    range: {
+      background: palette.blue[10],
+      backgroundBar: palette.blue[80],
+    },
+    pie: {
+      accepted: palette.blue[500],
+      declined: palette.blue[80],
+      waiting: palette.blue[60],
+    },
   },
   container: {
     authForm: '428px',

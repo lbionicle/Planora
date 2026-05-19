@@ -65,7 +65,7 @@ export default function EventTicketCard({
 
         <S.Content>
           <S.CardInfo>
-            <S.Title>{ticket.title}</S.Title>
+            <S.Title title={ticket.title}>{ticket.title}</S.Title>
 
             <EventInfoList
               items={[
@@ -78,7 +78,6 @@ export default function EventTicketCard({
                   key: 'location',
                   icon: <LocationIcon />,
                   text: ticket.location,
-                  title: ticket.location,
                 },
                 {
                   key: 'price',
@@ -122,7 +121,7 @@ export default function EventTicketCard({
 
           <Button
             fullWidth
-            colorScheme="secondary"
+            colorScheme="danger"
             size="lg"
             disabled={isCancelLoading}
             onClick={() => setIsCancelModalOpen(true)}
