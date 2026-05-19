@@ -6,16 +6,18 @@ import { useGetParticipantFavoriteEventsQuery } from '@/entities/event/api/parti
 import { useEventCardActions } from '@/entities/event/lib/useEventCardActions';
 import EventCard from '@/entities/event/ui/EventCard';
 import { routes } from '@/shared/model/routes';
+import InfiniteScrollObserver from '@/shared/ui/InfiniteScrollObserver';
 import PageLayout from '@/shared/ui/PageLayout';
 import SearchInput from '@/shared/ui/SearchInput';
 
 import * as S from './styled';
 
+const DEFAULT_PAGE = 1;
 const FAVORITES_PAGE_LIMIT = 12;
 
 export default function ParticipantFavoritesPage(): ReactNode {
   const [search, setSearch] = useState('');
-  const [page] = useState(1);
+  const [page, setPage] = useState(DEFAULT_PAGE);
 
   const deferredSearch = useDeferredValue(search.trim());
 
@@ -28,14 +30,35 @@ export default function ParticipantFavoritesPage(): ReactNode {
   });
 
   const events = data?.data.items ?? [];
+  const pagination = data?.data.pagination;
+
+  const hasNextPage = pagination
+    ? pagination.page < pagination.total_pages
+    : false;
 
   const breadcrumbs = [
     { label: 'Главная', href: routes.home },
     { label: 'Избранное' },
   ];
 
+  const isInitialLoading = isLoading && events.length === 0;
+  const isLoadingMore = isFetching && events.length > 0;
   const isEmpty = !isLoading && !isFetching && events.length === 0;
   const isSearching = deferredSearch.length > 0;
+
+  const handleSearchChange = (value: string): void => {
+    setSearch(value);
+    setPage(DEFAULT_PAGE);
+  };
+
+  const handleFavoriteClick = async (eventId: string): Promise<void> => {
+    await handleToggleFavoriteEvent(eventId);
+    setPage(DEFAULT_PAGE);
+  };
+
+  const handleLoadMore = (): void => {
+    setPage((currentPage) => currentPage + 1);
+  };
 
   return (
     <PageLayout
@@ -45,13 +68,11 @@ export default function ParticipantFavoritesPage(): ReactNode {
         <SearchInput
           value={search}
           placeholder="Введите название мероприятия для поиска"
-          onChange={setSearch}
+          onChange={handleSearchChange}
         />
       }
     >
-      {(isLoading || isFetching) && (
-        <S.Empty>Загрузка избранных мероприятий...</S.Empty>
-      )}
+      {isInitialLoading && <S.Empty>Загрузка избранных мероприятий...</S.Empty>}
 
       {isEmpty && (
         <S.Empty>
@@ -61,19 +82,31 @@ export default function ParticipantFavoritesPage(): ReactNode {
         </S.Empty>
       )}
 
-      {!isLoading && !isFetching && events.length > 0 && (
-        <S.List>
-          {events.map((event) => (
-            <EventCard
-              key={event.id}
-              event={event}
-              showFavorite
-              isFavorite
-              onFavoriteClick={() => handleToggleFavoriteEvent(event.id)}
-              onShareClick={() => handleShareEvent(event.public_id)}
-            />
-          ))}
-        </S.List>
+      {events.length > 0 && (
+        <>
+          <S.List>
+            {events.map((event) => (
+              <EventCard
+                key={event.id}
+                event={event}
+                showFavorite
+                isFavorite
+                onFavoriteClick={() => handleFavoriteClick(event.id)}
+                onShareClick={() => handleShareEvent(event.public_id)}
+              />
+            ))}
+          </S.List>
+
+          <InfiniteScrollObserver
+            hasNextPage={hasNextPage}
+            isLoading={isFetching}
+            onLoadMore={handleLoadMore}
+          />
+
+          {isLoadingMore && (
+            <S.LoadingMore>Загрузка избранных мероприятий...</S.LoadingMore>
+          )}
+        </>
       )}
     </PageLayout>
   );

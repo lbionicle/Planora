@@ -22,6 +22,7 @@ export interface EventTicket {
 
   title: string;
   image_url: string | null;
+  organizer_email: string;
 
   format: EventFormat;
   location: string;
@@ -43,4 +44,16 @@ export interface EventRegistrationStateResponse {
 
 export interface EventTicketsListResponse {
   items: EventTicket[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    total_pages: number;
+  };
+}
+
+export interface ParticipantTicketsRequest {
+  page: number;
+  limit: number;
+  search?: string;
 }

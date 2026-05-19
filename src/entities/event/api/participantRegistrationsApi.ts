@@ -3,6 +3,7 @@ import {
   EventRegistrationStateResponse,
   EventTicket,
   EventTicketsListResponse,
+  ParticipantTicketsRequest,
 } from '@/entities/event/model/registrationTypes';
 import { baseApi } from '@/shared/api/baseApi';
 import { ApiSuccessResponse } from '@/shared/api/types';
@@ -20,7 +21,7 @@ export const participantRegistrationsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, { eventId }) => [
         { type: 'ParticipantRegistrations', id: eventId },
-        'ParticipantRegistrations',
+        { type: 'ParticipantRegistrations', id: 'LIST' },
         'PublicEvents',
       ],
     }),
@@ -40,13 +41,61 @@ export const participantRegistrationsApi = baseApi.injectEndpoints({
 
     getParticipantTickets: builder.query<
       ApiSuccessResponse<EventTicketsListResponse>,
-      void
+      ParticipantTicketsRequest
     >({
-      query: () => ({
+      query: ({ page, limit, search }) => ({
         url: '/participant/tickets',
         method: 'GET',
+        params: {
+          page,
+          limit,
+          search: search || undefined,
+        },
       }),
-      providesTags: ['ParticipantRegistrations'],
+
+      serializeQueryArgs: ({ endpointName, queryArgs }) => ({
+        endpointName,
+        limit: queryArgs.limit,
+        search: queryArgs.search ?? '',
+      }),
+
+      merge: (currentCache, newResponse, { arg }) => {
+        if (arg.page === 1) {
+          currentCache.data = newResponse.data;
+          currentCache.message = newResponse.message;
+          currentCache.success = newResponse.success;
+          return;
+        }
+
+        const existingIds = new Set(
+          currentCache.data.items.map((ticket) => ticket.id),
+        );
+
+        const newItems = newResponse.data.items.filter(
+          (ticket) => !existingIds.has(ticket.id),
+        );
+
+        currentCache.data.items.push(...newItems);
+        currentCache.data.pagination = newResponse.data.pagination;
+        currentCache.message = newResponse.message;
+        currentCache.success = newResponse.success;
+      },
+
+      forceRefetch: ({ currentArg, previousArg }) =>
+        currentArg?.page !== previousArg?.page ||
+        currentArg?.limit !== previousArg?.limit ||
+        currentArg?.search !== previousArg?.search,
+
+      providesTags: (result) =>
+        result
+          ? [
+              { type: 'ParticipantRegistrations', id: 'LIST' },
+              ...result.data.items.map((ticket) => ({
+                type: 'ParticipantRegistrations' as const,
+                id: ticket.id,
+              })),
+            ]
+          : [{ type: 'ParticipantRegistrations', id: 'LIST' }],
     }),
 
     cancelParticipantTicket: builder.mutation<
@@ -57,7 +106,11 @@ export const participantRegistrationsApi = baseApi.injectEndpoints({
         url: `/participant/tickets/${registrationId}/cancel`,
         method: 'PATCH',
       }),
-      invalidatesTags: ['ParticipantRegistrations', 'PublicEvents'],
+      invalidatesTags: (_result, _error, registrationId) => [
+        { type: 'ParticipantRegistrations', id: registrationId },
+        { type: 'ParticipantRegistrations', id: 'LIST' },
+        'PublicEvents',
+      ],
     }),
   }),
 });
