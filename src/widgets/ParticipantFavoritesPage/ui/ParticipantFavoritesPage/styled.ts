@@ -32,3 +32,16 @@ export const Empty = styled.div`
     font-size: ${({ theme }) => theme.fontSize.xs};
   }
 `;
+
+export const LoadingMore = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.md};
+  text-align: center;
+
+  @media ${media.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.sm};
+  }
+
+  @media ${media.mobile} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+  }
+`;

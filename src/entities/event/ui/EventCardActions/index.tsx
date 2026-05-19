@@ -1,12 +1,12 @@
 'use client';
 
-import { MouseEvent, ReactNode } from 'react';
+import { HTMLAttributes, MouseEvent, ReactNode } from 'react';
 
 import { HeartFillIcon, HeartIcon, ShareIcon } from '@/shared/ui/Icons';
 
 import * as S from './styled';
 
-interface EventCardActionsProps {
+interface EventCardActionsProps extends HTMLAttributes<HTMLDivElement> {
   isFavorite?: boolean;
   showFavorite?: boolean;
   isFavoriteDisabled?: boolean;
@@ -22,6 +22,7 @@ export default function EventCardActions({
   isShareDisabled = false,
   onFavoriteClick,
   onShareClick,
+  ...props
 }: EventCardActionsProps): ReactNode {
   const handleFavoriteClick = (event: MouseEvent<HTMLButtonElement>): void => {
     event.preventDefault();
@@ -38,7 +39,7 @@ export default function EventCardActions({
   };
 
   return (
-    <S.Actions>
+    <S.Actions {...props}>
       {showFavorite && (
         <S.ActionButton
           $tone="favorite"

@@ -9,6 +9,7 @@ import { useDebouncedValue } from '@/shared/lib';
 import { routes } from '@/shared/model/routes';
 import FilterButton from '@/shared/ui/FilterButton';
 import { FilterIcon } from '@/shared/ui/Icons';
+import InfiniteScrollObserver from '@/shared/ui/InfiniteScrollObserver';
 import PageLayout from '@/shared/ui/PageLayout';
 import PageToolbar from '@/shared/ui/PageToolbar';
 
@@ -31,7 +32,7 @@ export default function EventsPage(): ReactNode {
   );
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
-  const debouncedSearch = useDebouncedValue(search, SEARCH_DELAY_MS);
+  const debouncedSearch = useDebouncedValue(search.trim(), SEARCH_DELAY_MS);
 
   const {
     showFavorite,
@@ -50,6 +51,11 @@ export default function EventsPage(): ReactNode {
   });
 
   const events = data?.data.items ?? [];
+  const pagination = data?.data.pagination;
+
+  const hasNextPage = pagination
+    ? pagination.page < pagination.total_pages
+    : false;
 
   const breadcrumbs = [
     { label: 'Главная', href: routes.home },
@@ -58,6 +64,8 @@ export default function EventsPage(): ReactNode {
 
   const hasFilters = hasPublicEventsFilters(filters);
   const isSearching = debouncedSearch.length > 0;
+  const isInitialLoading = isLoading && events.length === 0;
+  const isLoadingMore = isFetching && events.length > 0;
   const isEmpty = !isLoading && !isFetching && events.length === 0;
 
   const handleSearchChange = (value: string): void => {
@@ -95,6 +103,10 @@ export default function EventsPage(): ReactNode {
     setPage(DEFAULT_PAGE);
   };
 
+  const handleLoadMore = (): void => {
+    setPage((currentPage) => currentPage + 1);
+  };
+
   return (
     <>
       <PageLayout
@@ -125,9 +137,7 @@ export default function EventsPage(): ReactNode {
           />
         }
       >
-        {(isLoading || isFetching) && (
-          <S.Empty>Загрузка мероприятий...</S.Empty>
-        )}
+        {isInitialLoading && <S.Empty>Загрузка мероприятий...</S.Empty>}
 
         {isEmpty && (
           <S.Empty>
@@ -137,19 +147,31 @@ export default function EventsPage(): ReactNode {
           </S.Empty>
         )}
 
-        {!isLoading && !isFetching && events.length > 0 && (
-          <S.List>
-            {events.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                showFavorite={showFavorite}
-                isFavorite={isEventFavorite(event.id)}
-                onFavoriteClick={() => handleToggleFavoriteEvent(event.id)}
-                onShareClick={() => handleShareEvent(event.public_id)}
-              />
-            ))}
-          </S.List>
+        {events.length > 0 && (
+          <>
+            <S.List>
+              {events.map((event) => (
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  showFavorite={showFavorite}
+                  isFavorite={isEventFavorite(event.id)}
+                  onFavoriteClick={() => handleToggleFavoriteEvent(event.id)}
+                  onShareClick={() => handleShareEvent(event.public_id)}
+                />
+              ))}
+            </S.List>
+
+            <InfiniteScrollObserver
+              hasNextPage={hasNextPage}
+              isLoading={isFetching}
+              onLoadMore={handleLoadMore}
+            />
+
+            {isLoadingMore && (
+              <S.LoadingMore>Загрузка мероприятий...</S.LoadingMore>
+            )}
+          </>
         )}
       </PageLayout>
 
