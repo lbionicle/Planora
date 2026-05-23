@@ -13,6 +13,11 @@ interface TitleProps {
 }
 
 export const Card = styled.div<CardProps>`
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.lg};
@@ -24,6 +29,10 @@ export const Card = styled.div<CardProps>`
     theme.analytics.card[$variant].border};
   background-color: ${({ theme, $variant }) =>
     theme.analytics.card[$variant].background};
+
+  > * {
+    min-width: 0;
+  }
 
   @media ${media.tablet} {
     gap: ${({ theme }) => theme.spacing.md};
@@ -39,6 +48,7 @@ export const Card = styled.div<CardProps>`
 `;
 
 export const Header = styled.div`
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -54,6 +64,7 @@ export const Header = styled.div`
 `;
 
 export const Title = styled.h3<TitleProps>`
+  min-width: 0;
   color: ${({ theme, $variant }) =>
     $variant === 'accent' ? theme.text.inversion : theme.text.primary};
   font-size: ${({ theme }) => theme.fontSize.xl3};
@@ -63,7 +74,7 @@ export const Title = styled.h3<TitleProps>`
     font-size: ${({ theme }) => theme.fontSize.xl2};
   }
 
-  @media ${media.tablet} {
+  @media ${media.mobile} {
     font-size: ${({ theme }) => theme.fontSize.xl};
   }
 `;

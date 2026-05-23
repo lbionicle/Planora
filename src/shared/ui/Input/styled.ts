@@ -62,7 +62,7 @@ export const Field = styled.label<FieldProps>`
   gap: ${({ theme }) => theme.spacing.xs4};
   border: ${({ theme }) => theme.borderWidth.xs} solid;
   border-color: ${({ $hasError, theme }) =>
-    $hasError ? theme.border.danger : theme.border.primary};
+    $hasError ? theme.border.danger : theme.border.secondary};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.md}`};
   cursor: ${({ $isDisabled }) => ($isDisabled ? 'not-allowed' : 'text')};

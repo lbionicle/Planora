@@ -21,6 +21,7 @@ export const Percent = styled.span`
 `;
 
 export const Progress = styled.div`
+  flex-shrink: 0;
   width: 100%;
   height: ${({ theme }) => theme.spacing.xs3};
   overflow: hidden;
@@ -41,12 +42,19 @@ export const ProgressValue = styled.div<ProgressValueProps>`
 `;
 
 export const StatsRow = styled.div`
+  min-width: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: ${({ theme }) => theme.spacing.md};
+  margin-top: auto;
+
+  @media ${media.mobile} {
+    gap: ${({ theme }) => theme.spacing.xs4};
+  }
 `;
 
 export const StatItem = styled.div`
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,6 +70,7 @@ export const StatItem = styled.div`
 export const StatLabel = styled.span`
   color: ${({ theme }) => theme.text.primary};
   font-size: ${({ theme }) => theme.fontSize.md};
+  text-align: center;
 
   @media ${media.tablet} {
     font-size: ${({ theme }) => theme.fontSize.sm};

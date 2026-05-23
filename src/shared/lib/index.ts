@@ -1,4 +1,5 @@
 export * from './capitalizeFirstLetter';
+export * from './downloadFile';
 export * from './formatDateTime';
 export * from './formatEventDetailsDate';
 export * from './formatEventSalesEndDate';

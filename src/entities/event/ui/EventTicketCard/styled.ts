@@ -2,6 +2,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import { media } from '@/shared/styles';
+import Button from '@/shared/ui/Button';
 
 import EventCardActions from '../EventCardActions';
 
@@ -115,6 +116,12 @@ export const Actions = styled.div`
   @media ${media.tablet} {
     gap: ${({ theme }) => theme.spacing.xs3};
   }
+`;
+
+export const RejectButton = styled(Button).attrs({
+  colorScheme: 'info',
+})`
+  color: ${({ theme }) => theme.text.accent};
 `;
 
 export const ContactLink = styled(Link)`

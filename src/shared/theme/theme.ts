@@ -108,6 +108,7 @@ export const theme = {
   status: {
     success: palette.green[100],
     danger: palette.red[100],
+    accent: palette.blue[500],
     info: palette.blue[80],
     default: palette.black[40],
   },
@@ -142,6 +143,10 @@ export const theme = {
         background: palette.blue[500],
         border: palette.blue[500],
       },
+    },
+    chart: {
+      barMuted: palette.skyBlue[20],
+      barAccent: palette.blue[500],
     },
     range: {
       background: palette.blue[10],

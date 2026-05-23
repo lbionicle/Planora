@@ -7,10 +7,9 @@ import {
   eventFormatLabels,
   eventStatusLabels,
 } from '@/entities/event/model/constants';
-import { EventStatus } from '@/entities/event/model/types';
 import { formatDateTime } from '@/shared/lib';
 import { AnalyticsIcon, TicketIcon, TrashIcon } from '@/shared/ui/Icons';
-import TableActions from '@/shared/ui/TableActions';
+import TableActions, { TableActionItem } from '@/shared/ui/TableActions';
 
 import * as S from './styled';
 
@@ -22,7 +21,19 @@ interface GetEventAnalyticsTableColumnsParams {
   allowRsvp: boolean;
   onOpenAnalytics: (event: EventAnalyticsListItem) => void;
   onSendRsvp?: (event: EventAnalyticsListItem) => void | Promise<void>;
-  onDelete: (eventId: string) => void | Promise<void>;
+  onDelete?: (eventId: string) => void | Promise<void>;
+}
+
+function getOccupancyText(event: EventAnalyticsListItem): string {
+  return `${event.occupancy_percent}%`;
+}
+
+function getTicketsText(event: EventAnalyticsListItem): string {
+  return `${event.registered_tickets_count} / ${event.tickets_count}`;
+}
+
+function getRsvpText(event: EventAnalyticsListItem): string {
+  return `${event.rsvp_accepted_count} / ${event.rsvp_declined_count} / ${event.rsvp_waiting_count}`;
 }
 
 export function getEventAnalyticsTableColumns({
@@ -47,7 +58,7 @@ export function getEventAnalyticsTableColumns({
     },
     {
       accessorKey: 'title',
-      header: 'Название',
+      header: 'Мероприятие',
       size: 220,
     },
   ];
@@ -62,8 +73,14 @@ export function getEventAnalyticsTableColumns({
 
   columns.push(
     {
+      accessorKey: 'format',
+      header: 'Формат',
+      size: 120,
+      cell: ({ row }) => eventFormatLabels[row.original.format],
+    },
+    {
       accessorKey: 'starts_at',
-      header: 'Дата и время',
+      header: 'Дата начала',
       size: 160,
       cell: ({ row }) => formatDateTime(row.original.starts_at),
       meta: {
@@ -72,10 +89,9 @@ export function getEventAnalyticsTableColumns({
       },
     },
     {
-      accessorKey: 'format',
-      header: 'Формат',
-      size: 120,
-      cell: ({ row }) => eventFormatLabels[row.original.format],
+      accessorKey: 'location',
+      header: 'Место проведения',
+      size: 220,
     },
     {
       accessorKey: 'status',
@@ -91,9 +107,20 @@ export function getEventAnalyticsTableColumns({
       },
     },
     {
-      accessorKey: 'tickets_count',
-      header: 'Всего мест',
+      id: 'tickets',
+      header: 'Места',
       size: 110,
+      cell: ({ row }) => getTicketsText(row.original),
+      meta: {
+        getTooltip: (row: EventAnalyticsListItem) =>
+          `Занято ${row.registered_tickets_count} из ${row.tickets_count}`,
+      },
+    },
+    {
+      accessorKey: 'occupancy_percent',
+      header: 'Заполненность',
+      size: 130,
+      cell: ({ row }) => getOccupancyText(row.original),
     },
     {
       accessorKey: 'registrations_count',
@@ -101,108 +128,75 @@ export function getEventAnalyticsTableColumns({
       size: 100,
     },
     {
-      accessorKey: 'registered_tickets_count',
-      header: 'Занято',
-      size: 100,
-    },
-    {
-      accessorKey: 'available_tickets_count',
-      header: 'Свободно',
-      size: 110,
-    },
-    {
-      accessorKey: 'occupancy_percent',
-      header: 'Заполненность',
-      size: 140,
-      cell: ({ row }) => `${row.original.occupancy_percent}%`,
+      id: 'rsvp',
+      header: 'RSVP',
+      size: 150,
+      cell: ({ row }) => getRsvpText(row.original),
       meta: {
-        disableTooltip: true,
+        getTooltip: (row: EventAnalyticsListItem) =>
+          `Подтвердили: ${row.rsvp_accepted_count}, отказались: ${row.rsvp_declined_count}, ожидают: ${row.rsvp_waiting_count}`,
       },
-    },
-    {
-      accessorKey: 'rsvp_waiting_count',
-      header: 'Ожидают RSVP',
-      size: 140,
-    },
-    {
-      accessorKey: 'rsvp_accepted_count',
-      header: 'Подтвердили',
-      size: 130,
-    },
-    {
-      accessorKey: 'rsvp_declined_count',
-      header: 'Отказались',
-      size: 120,
     },
     {
       id: 'actions',
       header: 'Действия',
-      size: allowRsvp ? 190 : 140,
+      size: 170,
       cell: ({ row }) => {
         const event = row.original;
         const isProcessing = processingId === event.id;
 
-        const canSendRsvp =
-          allowRsvp &&
-          Boolean(onSendRsvp) &&
-          event.status === EventStatus.PUBLISHED &&
-          event.rsvp_waiting_count > 0;
+        const actions: TableActionItem[] = [
+          {
+            key: 'analytics',
+            icon: <AnalyticsIcon />,
+            colorScheme: 'info',
+            title: 'Открыть аналитику мероприятия',
+            disabled: isProcessing,
+            onClick: () => onOpenAnalytics(event),
+          },
+        ];
 
-        return (
-          <TableActions
-            actions={[
-              {
-                key: 'rsvp',
-                icon: <TicketIcon />,
-                colorScheme: 'info',
-                title: 'Разослать RSVP',
-                hidden: !allowRsvp,
-                disabled: isProcessing || !canSendRsvp,
-                confirm: {
-                  title: 'Разослать RSVP?',
-                  description:
-                    'RSVP-запросы будут отправлены всем участникам, которые ещё не ответили.',
-                  icon: <TicketIcon />,
-                  confirmText: 'Разослать',
-                  cancelText: 'Отменить',
-                  confirmColorScheme: 'accent',
-                },
-                onClick: async () => {
-                  if (!onSendRsvp) {
-                    return;
-                  }
+        if (allowRsvp && onSendRsvp) {
+          actions.push({
+            key: 'rsvp',
+            icon: <TicketIcon />,
+            colorScheme: 'info',
+            title: 'Разослать RSVP участникам без ответа',
+            disabled: isProcessing || event.rsvp_waiting_count === 0,
+            confirm: {
+              title: 'Разослать RSVP?',
+              description:
+                'RSVP-запросы будут отправлены участникам, которые ещё не подтвердили и не отклонили участие.',
+              icon: <TicketIcon />,
+              confirmText: 'Разослать',
+              cancelText: 'Отменить',
+              confirmColorScheme: 'info',
+            },
+            onClick: () => onSendRsvp(event),
+          });
+        }
 
-                  await onSendRsvp(event);
-                },
-              },
-              {
-                key: 'analytics',
-                icon: <AnalyticsIcon />,
-                colorScheme: 'info',
-                title: 'Открыть аналитику',
-                disabled: isProcessing,
-                onClick: () => onOpenAnalytics(event),
-              },
-              {
-                key: 'delete',
-                icon: <TrashIcon />,
-                colorScheme: 'danger',
-                title: 'Удалить мероприятие',
-                disabled: isProcessing,
-                confirm: {
-                  title: 'Удалить мероприятие?',
-                  description:
-                    'После удаления мероприятие пропадет из системы, а восстановить его будет нельзя.',
-                  icon: <TrashIcon />,
-                  confirmText: 'Удалить',
-                  cancelText: 'Отменить',
-                  confirmColorScheme: 'danger',
-                },
-                onClick: () => onDelete(event.id),
-              },
-            ]}
-          />
-        );
+        if (onDelete) {
+          actions.push({
+            key: 'delete',
+            icon: <TrashIcon />,
+            colorScheme: 'danger',
+            title: 'Удалить мероприятие',
+            disabled: isProcessing,
+            confirm: {
+              title: 'Удалить мероприятие?',
+              description:
+                'После удаления мероприятие пропадёт из системы, восстановить его будет нельзя.',
+              icon: <TrashIcon />,
+              confirmText: 'Удалить',
+              cancelText: 'Отменить',
+              confirmColorScheme: 'danger',
+            },
+            onClick: () => onDelete(event.id),
+          });
+        }
+
+        return <TableActions actions={actions} />;
       },
       meta: {
         disableTooltip: true,

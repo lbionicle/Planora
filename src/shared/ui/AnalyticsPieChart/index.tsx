@@ -11,6 +11,8 @@ import {
 } from 'recharts';
 import { DefaultTheme, useTheme } from 'styled-components';
 
+import AnalyticsEmpty from '@/shared/ui/AnalyticsEmpty';
+
 import * as S from './styled';
 
 export type AnalyticsPieSegmentTone = 'accent' | 'info' | 'neutral';
@@ -106,7 +108,7 @@ function renderPieLabel(
 
 export default function AnalyticsPieChart({
   segments,
-  height = 240,
+  height,
   emptyText = 'Данные для диаграммы отсутствуют',
 }: AnalyticsPieChartProps): ReactNode {
   const theme = useTheme();
@@ -122,7 +124,7 @@ export default function AnalyticsPieChart({
   }, [segments, theme, total]);
 
   if (total <= 0) {
-    return <S.Empty>{emptyText}</S.Empty>;
+    return <AnalyticsEmpty text={emptyText} />;
   }
 
   return (
@@ -135,13 +137,13 @@ export default function AnalyticsPieChart({
                 border: 'none',
                 padding: `${theme.spacing.xs4} ${theme.spacing.xs2}`,
                 borderRadius: theme.borderRadius.xs3,
-                backgroundColor: theme.background.primary,
+                backgroundColor: theme.background.accent,
               }}
               labelStyle={{
-                color: theme.text.accent,
+                color: theme.text.inversion,
               }}
               itemStyle={{
-                color: theme.text.accent,
+                color: theme.text.inversion,
               }}
             />
 
@@ -169,7 +171,6 @@ export default function AnalyticsPieChart({
         {chartData.map((segment) => (
           <S.LegendItem key={segment.key}>
             <S.LegendColor $color={segment.color} />
-
             <S.LegendText>{segment.label}</S.LegendText>
           </S.LegendItem>
         ))}

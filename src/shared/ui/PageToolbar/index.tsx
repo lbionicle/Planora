@@ -40,7 +40,7 @@ export default function PageToolbar({
             />
           )}
 
-          <S.Actions>{action}</S.Actions>
+          {action && <S.Actions>{action}</S.Actions>}
         </S.Toolbar>
       )}
 

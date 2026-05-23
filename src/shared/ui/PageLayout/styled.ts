@@ -20,6 +20,29 @@ export const Page = styled.section`
   }
 `;
 
+export const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.lg};
+
+  @media ${media.tablet} {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.spacing.md};
+  }
+`;
+
+export const HeaderRight = styled.div`
+  display: flex;
+  justify-content: flex-end;
+
+  @media ${media.tablet} {
+    width: 100%;
+    justify-content: flex-start;
+  }
+`;
+
 export const Title = styled.h1`
   color: ${({ theme }) => theme.text.primary};
   font-size: ${({ theme }) => theme.fontSize.xl6};

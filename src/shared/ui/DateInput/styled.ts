@@ -152,12 +152,12 @@ export const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs6};
 `;
 
 export const Label = styled.label`
   color: ${({ theme }) => theme.text.secondary};
   font-size: ${({ theme }) => theme.fontSize.md};
+  margin-bottom: ${({ theme }) => theme.spacing.xs6};
 
   @media ${media.tablet} {
     font-size: ${({ theme }) => theme.fontSize.sm};
@@ -174,7 +174,7 @@ export const DateField = styled.input<DateButtonProps>`
   width: 100%;
   border: ${({ theme }) => theme.borderWidth.xs} solid;
   border-color: ${({ $hasError, theme }) =>
-    $hasError ? theme.border.danger : theme.border.primary};
+    $hasError ? theme.border.danger : theme.border.secondary};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.md}`};
   color: ${({ theme }) => theme.text.primary};
@@ -211,6 +211,7 @@ export const Error = styled.span`
   color: ${({ theme }) => theme.status.danger};
   font-size: ${({ theme }) => theme.fontSize.xs};
   line-height: ${({ theme }) => theme.lineHeight.sm};
+  margin-top: ${({ theme }) => theme.spacing.xs6};
 
   @media ${media.tablet} {
     font-size: ${({ theme }) => theme.fontSize.xs3};
