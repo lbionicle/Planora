@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import {
@@ -24,11 +24,14 @@ import {
 
 import * as S from './styled';
 
-export default function RsvpResponsePage(): ReactNode {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+interface RsvpResponsePageProps {
+  token: string;
+}
 
-  const token = searchParams.get('token') ?? '';
+export default function RsvpResponsePage({
+  token,
+}: RsvpResponsePageProps): ReactNode {
+  const router = useRouter();
 
   const { data, isLoading, isFetching, isError } = useGetRsvpPreviewQuery(
     token,
