@@ -14,14 +14,18 @@ interface TextBlockProps {
 
 export const Root = styled(AnalyticsCard)<RootProps>`
   justify-content: space-between;
+
   border-color: ${({ theme, $isDisabled }) =>
     $isDisabled ? theme.action.disabled.background : theme.background.accent};
+
   background-color: ${({ theme, $isDisabled }) =>
     $isDisabled ? theme.action.disabled.background : theme.background.accent};
-  cursor: ${({ $isDisabled }) => ($isDisabled ? 'not-allowed' : 'cursor')};
+
+  cursor: ${({ $isDisabled }) => ($isDisabled ? 'not-allowed' : 'pointer')};
 `;
 
 export const TextBlock = styled.div<TextBlockProps>`
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.xs4};
@@ -60,10 +64,11 @@ export const Description = styled.p`
 `;
 
 export const Actions = styled.div`
-  display: flex;
   flex-shrink: 0;
+  display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-top: auto;
   text-align: end;
 
   @media ${media.tablet} {

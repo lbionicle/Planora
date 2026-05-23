@@ -9,6 +9,7 @@ import AnalyticsAreaChart, {
   AnalyticsAreaChartPoint,
 } from '@/shared/ui/AnalyticsAreaChart';
 import AnalyticsCard from '@/shared/ui/AnalyticsCard';
+import AnalyticsEmpty from '@/shared/ui/AnalyticsEmpty';
 import AnalyticsExportCard from '@/shared/ui/AnalyticsExportCard';
 import AnalyticsOccupancyCard from '@/shared/ui/AnalyticsOccupancyCard';
 import AnalyticsPieChart, {
@@ -16,6 +17,7 @@ import AnalyticsPieChart, {
 } from '@/shared/ui/AnalyticsPieChart';
 import { CalendarIcon, LocationIcon, OrganizerIcon } from '@/shared/ui/Icons';
 import Modal from '@/shared/ui/Modal';
+import { formatChartTooltipDate } from '@/widgets/AdminAnalyticsPage/lib/formatAdminAnalytics';
 
 import * as S from './styled';
 
@@ -23,20 +25,21 @@ interface EventAnalyticsModalProps {
   isOpen: boolean;
   analytics: EventAnalyticsDetail | null;
   isLoading?: boolean;
+  isExportLoading?: boolean;
   onClose: () => void;
-  onExportReport?: (analytics: EventAnalyticsDetail) => void;
+  onExportReport?: (analytics: EventAnalyticsDetail) => void | Promise<void>;
 }
 
 function formatChartDate(value: string): string {
   const date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {
-    return '';
+    return value;
   }
 
   return new Intl.DateTimeFormat('ru-RU', {
-    weekday: 'short',
     day: '2-digit',
+    month: '2-digit',
   }).format(date);
 }
 
@@ -44,12 +47,15 @@ export default function EventAnalyticsModal({
   isOpen,
   analytics,
   isLoading = false,
+  isExportLoading = false,
   onClose,
   onExportReport,
 }: EventAnalyticsModalProps): ReactNode {
   const registrationChartData = useMemo<AnalyticsAreaChartPoint[]>(() => {
     return (analytics?.registrations_by_day ?? []).map((point) => ({
+      date: point.date,
       label: formatChartDate(point.date),
+      tooltipLabel: formatChartTooltipDate(point.date),
       value: point.value,
     }));
   }, [analytics?.registrations_by_day]);
@@ -81,20 +87,20 @@ export default function EventAnalyticsModal({
     ];
   }, [analytics]);
 
-  const handleExportReport = (): void => {
-    if (!analytics) {
+  const handleExportReport = async (): Promise<void> => {
+    if (!analytics || !onExportReport) {
       return;
     }
 
-    onExportReport?.(analytics);
+    await onExportReport(analytics);
   };
 
   return (
     <Modal isOpen={isOpen} title={analytics?.title} size="xl" onClose={onClose}>
-      {isLoading && <S.Empty>Загрузка аналитики мероприятия...</S.Empty>}
+      {isLoading && <AnalyticsEmpty text="Загрузка аналитики мероприятия..." />}
 
       {!isLoading && !analytics && (
-        <S.Empty>Не удалось загрузить аналитику мероприятия.</S.Empty>
+        <AnalyticsEmpty text="Не удалось загрузить аналитику мероприятия." />
       )}
 
       {!isLoading && analytics && (
@@ -122,43 +128,36 @@ export default function EventAnalyticsModal({
 
           <S.Grid>
             <S.LeftColumn>
-              <S.CardSlot>
-                <AnalyticsOccupancyCard
-                  percent={analytics.occupancy_percent}
-                  availableCount={analytics.available_tickets_count}
-                  occupiedCount={analytics.registered_tickets_count}
-                  totalCount={analytics.tickets_count}
-                />
-              </S.CardSlot>
+              <AnalyticsOccupancyCard
+                percent={analytics.occupancy_percent}
+                availableCount={analytics.available_tickets_count}
+                occupiedCount={analytics.registered_tickets_count}
+                totalCount={analytics.tickets_count}
+              />
 
-              <S.CardSlot>
-                <AnalyticsCard title="Статусы откликов RSVP">
-                  <AnalyticsPieChart
-                    segments={rsvpSegments}
-                    emptyText="RSVP-ответов пока нет"
-                  />
-                </AnalyticsCard>
-              </S.CardSlot>
+              <AnalyticsCard title="Статусы откликов RSVP">
+                <AnalyticsPieChart
+                  segments={rsvpSegments}
+                  emptyText="RSVP-ответов пока нет"
+                />
+              </AnalyticsCard>
             </S.LeftColumn>
 
             <S.RightColumn>
-              <S.CardSlot>
-                <AnalyticsCard title="Динамика регистраций по мероприятию">
-                  <AnalyticsAreaChart
-                    data={registrationChartData}
-                    valueName="Регистрации"
-                    emptyText="Регистраций по мероприятию пока нет"
-                  />
-                </AnalyticsCard>
-              </S.CardSlot>
-
-              <S.CardSlot>
-                <AnalyticsExportCard
-                  title="Экспорт отчёта"
-                  description="XLSX с аналитикой по выбранному мероприятию"
-                  onClick={handleExportReport}
+              <AnalyticsCard title="Динамика регистраций по мероприятию">
+                <AnalyticsAreaChart
+                  data={registrationChartData}
+                  valueName="Регистрации"
+                  emptyText="Регистраций по мероприятию пока нет"
                 />
-              </S.CardSlot>
+              </AnalyticsCard>
+
+              <AnalyticsExportCard
+                title="Экспорт отчёта"
+                description="XLSX с аналитикой по выбранному мероприятию"
+                isDisabled={isExportLoading || !onExportReport}
+                onClick={handleExportReport}
+              />
             </S.RightColumn>
           </S.Grid>
         </S.Content>

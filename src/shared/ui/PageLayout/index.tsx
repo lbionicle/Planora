@@ -10,19 +10,26 @@ interface PageLayoutProps extends PropsWithChildren {
   title?: string;
   breadcrumbs?: BreadcrumbItem[];
   toolbar?: ReactNode;
+  headerRight?: ReactNode;
 }
 
 export default function PageLayout({
   title,
   breadcrumbs,
   toolbar,
+  headerRight,
   children,
 }: PageLayoutProps): ReactNode {
   return (
     <S.Page>
       {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
 
-      {title && <S.Title>{title}</S.Title>}
+      {(title || headerRight) && (
+        <S.Header>
+          {title && <S.Title>{title}</S.Title>}
+          {headerRight && <S.HeaderRight>{headerRight}</S.HeaderRight>}
+        </S.Header>
+      )}
 
       {toolbar}
 

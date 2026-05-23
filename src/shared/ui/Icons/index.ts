@@ -14,6 +14,7 @@ import { EventsFillIcon } from './EventsFill';
 import { EyeIcon } from './Eye';
 import { EyeOffIcon } from './EyeOff';
 import { FileIcon } from './File';
+import { FileFillIcon } from './FileFill';
 import { FilterIcon } from './Filter';
 import { HeartIcon } from './Heart';
 import { HeartFillIcon } from './HeartFill';
@@ -23,6 +24,7 @@ import { LogoIcon } from './Logo';
 import { LogoutIcon } from './Logout';
 import { MinusIcon } from './Minus';
 import { OrganizerIcon } from './Organizer';
+import { OrganizerFillIcon } from './OrganizerFill';
 import { PlusIcon } from './Plus';
 import { RequestsIcon } from './Requests';
 import { RequestsFillIcon } from './RequestsFill';
@@ -52,6 +54,7 @@ export {
   EventsIcon,
   EyeIcon,
   EyeOffIcon,
+  FileFillIcon,
   FileIcon,
   FilterIcon,
   HeartFillIcon,
@@ -61,6 +64,7 @@ export {
   LogoIcon,
   LogoutIcon,
   MinusIcon,
+  OrganizerFillIcon,
   OrganizerIcon,
   PlusIcon,
   RequestsFillIcon,

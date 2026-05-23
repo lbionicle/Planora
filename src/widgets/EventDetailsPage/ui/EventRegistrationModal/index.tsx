@@ -144,7 +144,6 @@ export default function EventRegistrationModal({
             <S.Hint>
               <span>
                 Продажи заканчиваются {formatEventSalesEndDate(event.starts_at)}
-                .
               </span>
               <span>Осталось мест: {event.available_tickets_count}</span>
             </S.Hint>

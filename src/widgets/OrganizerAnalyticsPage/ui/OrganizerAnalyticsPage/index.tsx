@@ -4,12 +4,16 @@ import { ReactNode, useCallback, useState } from 'react';
 import { toast } from 'sonner';
 
 import {
+  useExportOrganizerEventAnalyticsReportMutation,
   useGetOrganizerAnalyticsEventsQuery,
   useGetOrganizerEventAnalyticsQuery,
   useSendOrganizerEventRsvpMutation,
 } from '@/entities/event/api/organizerAnalyticsApi';
 import { useDeleteOrganizerEventMutation } from '@/entities/event/api/organizerEventsApi';
-import { EventAnalyticsListItem } from '@/entities/event/model/analyticsTypes';
+import {
+  EventAnalyticsDetail,
+  EventAnalyticsListItem,
+} from '@/entities/event/model/analyticsTypes';
 import { getApiErrorMessage, useDebouncedValue } from '@/shared/lib';
 import PageLayout from '@/shared/ui/PageLayout';
 import PageToolbar from '@/shared/ui/PageToolbar';
@@ -41,6 +45,9 @@ export default function OrganizerAnalyticsPage(): ReactNode {
 
   const [sendRsvp] = useSendOrganizerEventRsvpMutation();
   const [deleteEvent] = useDeleteOrganizerEventMutation();
+
+  const [exportEventAnalyticsReport, { isLoading: isExportLoading }] =
+    useExportOrganizerEventAnalyticsReportMutation();
 
   const events = data?.data.items ?? [];
   const pagination = data?.data.pagination;
@@ -104,8 +111,19 @@ export default function OrganizerAnalyticsPage(): ReactNode {
     [deleteEvent, events.length, page],
   );
 
-  const handleExportReport = (): void => {
-    toast.info('Экспорт отчёта будет добавлен позже.');
+  const handleExportReport = async (
+    analytics: EventAnalyticsDetail,
+  ): Promise<void> => {
+    try {
+      await exportEventAnalyticsReport({
+        eventId: analytics.id,
+        filename: `event-analytics-${analytics.public_id}.xlsx`,
+      }).unwrap();
+
+      toast.success('Отчёт успешно экспортирован.');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error));
+    }
   };
 
   return (
@@ -147,6 +165,7 @@ export default function OrganizerAnalyticsPage(): ReactNode {
         isOpen={selectedEventId !== null}
         analytics={analyticsData?.data ?? null}
         isLoading={isAnalyticsFetching}
+        isExportLoading={isExportLoading}
         onClose={handleCloseAnalytics}
         onExportReport={handleExportReport}
       />

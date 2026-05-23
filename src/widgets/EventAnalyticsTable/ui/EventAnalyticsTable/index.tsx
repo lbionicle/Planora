@@ -20,7 +20,7 @@ interface EventAnalyticsTableProps {
   onPageChange: (page: number) => void;
   onOpenAnalytics: (event: EventAnalyticsListItem) => void;
   onSendRsvp?: (event: EventAnalyticsListItem) => void | Promise<void>;
-  onDelete: (eventId: string) => void | Promise<void>;
+  onDelete?: (eventId: string) => void | Promise<void>;
 }
 
 export default function EventAnalyticsTable({

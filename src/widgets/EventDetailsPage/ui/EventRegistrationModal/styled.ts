@@ -51,6 +51,7 @@ export const TicketInfo = styled.div`
 export const Hint = styled.p`
   display: flex;
   flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xs4};
   font-size: ${({ theme }) => theme.fontSize.md};
   line-height: ${({ theme }) => theme.lineHeight.md};
   white-space: pre-line;

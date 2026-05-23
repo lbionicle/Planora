@@ -13,12 +13,18 @@ export const Content = styled.div`
 `;
 
 export const Grid = styled.div`
+  width: 100%;
+  min-width: 0;
+
+  height: min(56vh, 700px);
+
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: ${({ theme }) => theme.spacing.lg};
   align-items: stretch;
 
   @media ${media.laptop} {
+    height: auto;
     grid-template-columns: 1fr;
   }
 
@@ -31,57 +37,51 @@ export const Grid = styled.div`
   }
 `;
 
-export const LeftColumn = styled.div`
+export const Column = styled.div`
   min-width: 0;
+  min-height: 0;
+  height: 100%;
+
   display: grid;
-  grid-template-rows: 0.42fr 0.58fr;
   gap: ${({ theme }) => theme.spacing.lg};
-
-  @media ${media.laptop} {
-    grid-template-rows: auto;
-  }
-
-  @media ${media.tablet} {
-    gap: ${({ theme }) => theme.spacing.md};
-  }
-
-  @media ${media.mobile} {
-    gap: ${({ theme }) => theme.spacing.sm};
-  }
-`;
-
-export const RightColumn = styled.div`
-  min-width: 0;
-  display: grid;
-  grid-template-rows: 0.68fr 0.32fr;
-  gap: ${({ theme }) => theme.spacing.lg};
-
-  @media ${media.laptop} {
-    grid-template-rows: auto;
-  }
-
-  @media ${media.tablet} {
-    gap: ${({ theme }) => theme.spacing.md};
-  }
-
-  @media ${media.mobile} {
-    gap: ${({ theme }) => theme.spacing.sm};
-  }
-`;
-
-export const CardSlot = styled.div`
-  min-width: 0;
-  display: flex;
 
   > * {
     width: 100%;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  @media ${media.laptop} {
+    height: auto;
+    grid-template-rows: auto;
+
+    > * {
+      height: auto;
+    }
+  }
+
+  @media ${media.tablet} {
+    gap: ${({ theme }) => theme.spacing.md};
+  }
+
+  @media ${media.mobile} {
+    gap: ${({ theme }) => theme.spacing.sm};
   }
 `;
 
-export const Empty = styled.div`
-  padding: ${({ theme }) => theme.spacing.xl};
-  color: ${({ theme }) => theme.text.secondary};
-  font-size: ${({ theme }) => theme.fontSize.md};
-  text-align: center;
+export const LeftColumn = styled(Column)`
+  grid-template-rows: minmax(0, 0.42fr) minmax(0, 0.58fr);
+
+  @media ${media.laptop} {
+    grid-template-rows: auto;
+  }
+`;
+
+export const RightColumn = styled(Column)`
+  grid-template-rows: minmax(0, 0.68fr) minmax(0, 0.32fr);
+
+  @media ${media.laptop} {
+    grid-template-rows: auto;
+  }
 `;

@@ -112,22 +112,19 @@ export default function EventTicketCard({
             <Button
               fullWidth
               colorScheme="accent"
-              size="lg"
               onClick={() => onDownloadClick(ticket)}
             >
               Скачать билет
             </Button>
           )}
 
-          <Button
+          <S.RejectButton
             fullWidth
-            colorScheme="danger"
-            size="lg"
             disabled={isCancelLoading}
             onClick={() => setIsCancelModalOpen(true)}
           >
             {isCancelLoading ? 'Отмена...' : 'Отменить заявку'}
-          </Button>
+          </S.RejectButton>
 
           <S.ContactLink href={contactHref}>
             Связаться с организатором
