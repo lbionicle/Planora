@@ -1,12 +1,13 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { useLoginMutation } from '@/features/auth/api/authApi';
+import { getAuthRouteWithCallback } from '@/features/auth/lib/getAuthRouteWithCallback';
 import { getRedirectAfterLogin } from '@/features/auth/lib/getRedirectAfterLogin';
 import { SignInFormValues, signInSchema } from '@/features/auth/model/schemas';
 import AuthAgreement from '@/features/auth/ui/AuthAgreement';
@@ -22,9 +23,14 @@ import * as S from './styled';
 
 const SIGN_IN_FORM_ID = 'sign-in-form';
 
-export default function SignInForm(): ReactNode {
+interface SignInFormProps {
+  callbackUrl?: string | null;
+}
+
+export default function SignInForm({
+  callbackUrl = null,
+}: SignInFormProps): ReactNode {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [login, { isLoading }] = useLoginMutation();
 
   const {
@@ -45,7 +51,7 @@ export default function SignInForm(): ReactNode {
 
       const redirectPath = getRedirectAfterLogin(
         response.data.user.role,
-        searchParams.get('callbackUrl'),
+        callbackUrl,
       );
 
       toast.success('Вход выполнен успешно');
@@ -62,7 +68,8 @@ export default function SignInForm(): ReactNode {
     primaryForm: SIGN_IN_FORM_ID,
     primaryDisabled: isLoading,
     loadingText: 'Вход...',
-    onSecondaryClick: () => router.push(routes.auth.signUp),
+    onSecondaryClick: () =>
+      router.push(getAuthRouteWithCallback(routes.auth.signUp, callbackUrl)),
   };
 
   return (

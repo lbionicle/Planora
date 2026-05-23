@@ -11,6 +11,7 @@ import {
   useRegisterOrganizerMutation,
   useRegisterParticipantMutation,
 } from '@/features/auth/api/authApi';
+import { getAuthRouteWithCallback } from '@/features/auth/lib/getAuthRouteWithCallback';
 import {
   OrganizerSignUpFormValues,
   organizerSignUpSchema,
@@ -33,7 +34,13 @@ import * as S from './styled';
 const PARTICIPANT_SIGN_UP_FORM_ID = 'participant-sign-up-form';
 const ORGANIZER_SIGN_UP_FORM_ID = 'organizer-sign-up-form';
 
-export default function SignUpForm(): ReactNode {
+interface SignUpFormProps {
+  callbackUrl?: string | null;
+}
+
+export default function SignUpForm({
+  callbackUrl = null,
+}: SignUpFormProps): ReactNode {
   const router = useRouter();
 
   const [mode, setMode] = useState<SignUpMode>(UserRole.PARTICIPANT);
@@ -68,6 +75,8 @@ export default function SignUpForm(): ReactNode {
 
   const isParticipantMode = mode === UserRole.PARTICIPANT;
 
+  const signInRoute = getAuthRouteWithCallback(routes.auth.signIn, callbackUrl);
+
   const onParticipantSubmit = async (
     values: ParticipantSignUpFormValues,
   ): Promise<void> => {
@@ -75,7 +84,7 @@ export default function SignUpForm(): ReactNode {
       await registerParticipant(values).unwrap();
 
       toast.success('Регистрация выполнена. Теперь войдите в систему.');
-      router.replace(routes.auth.signIn);
+      router.replace(signInRoute);
     } catch (error) {
       toast.error(getApiErrorMessage(error));
     }
@@ -104,7 +113,7 @@ export default function SignUpForm(): ReactNode {
       toast.success(
         'Заявка отправлена. Ожидайте подтверждения администратора.',
       );
-      router.replace(routes.auth.signIn);
+      router.replace(signInRoute);
     } catch (error) {
       toast.error(getApiErrorMessage(error));
     }
@@ -119,7 +128,7 @@ export default function SignUpForm(): ReactNode {
       : ORGANIZER_SIGN_UP_FORM_ID,
     isLoading: isParticipantMode ? isParticipantLoading : isOrganizerLoading,
     loadingText: isParticipantMode ? 'Регистрация...' : 'Отправка...',
-    onSecondaryClick: () => router.push(routes.auth.signIn),
+    onSecondaryClick: () => router.push(signInRoute),
   };
 
   return (
