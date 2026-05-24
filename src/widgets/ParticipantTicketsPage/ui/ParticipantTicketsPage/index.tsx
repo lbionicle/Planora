@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import {
   useCancelParticipantTicketMutation,
+  useDownloadParticipantTicketMutation,
   useGetParticipantTicketsQuery,
 } from '@/entities/event/api/participantRegistrationsApi';
 import { useEventCardActions } from '@/entities/event/lib/useEventCardActions';
@@ -27,6 +28,9 @@ export default function ParticipantTicketsPage(): ReactNode {
   const [cancelingTicketId, setCancelingTicketId] = useState<string | null>(
     null,
   );
+  const [downloadingTicketId, setDownloadingTicketId] = useState<string | null>(
+    null,
+  );
 
   const deferredSearch = useDeferredValue(search.trim());
 
@@ -39,6 +43,7 @@ export default function ParticipantTicketsPage(): ReactNode {
   });
 
   const [cancelTicket] = useCancelParticipantTicketMutation();
+  const [downloadTicket] = useDownloadParticipantTicketMutation();
 
   const tickets = data?.data.items ?? [];
   const pagination = data?.data.pagination;
@@ -71,8 +76,21 @@ export default function ParticipantTicketsPage(): ReactNode {
     window.open(ticket.online_url, '_blank', 'noopener,noreferrer');
   };
 
-  const handleDownload = (_ticket: EventTicket): void => {
-    toast.info('Скачивание билета будет добавлено позже.');
+  const handleDownload = async (ticket: EventTicket): Promise<void> => {
+    try {
+      setDownloadingTicketId(ticket.id);
+
+      await downloadTicket({
+        registrationId: ticket.id,
+        filename: `planora-ticket-${ticket.public_id}.pdf`,
+      }).unwrap();
+
+      toast.success('Билет успешно скачан.');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error));
+    } finally {
+      setDownloadingTicketId(null);
+    }
   };
 
   const handleCancel = async (ticket: EventTicket): Promise<void> => {
@@ -124,6 +142,7 @@ export default function ParticipantTicketsPage(): ReactNode {
                 key={ticket.id}
                 ticket={ticket}
                 isCancelLoading={cancelingTicketId === ticket.id}
+                isDownloadLoading={downloadingTicketId === ticket.id}
                 onShareClick={() => handleShareEvent(ticket.public_id)}
                 onOpenOnlineClick={handleOpenOnline}
                 onDownloadClick={handleDownload}

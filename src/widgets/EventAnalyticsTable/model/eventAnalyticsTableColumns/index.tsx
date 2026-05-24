@@ -8,7 +8,12 @@ import {
   eventStatusLabels,
 } from '@/entities/event/model/constants';
 import { formatDateTime } from '@/shared/lib';
-import { AnalyticsIcon, EmailIcon, TicketIcon } from '@/shared/ui/Icons';
+import {
+  AnalyticsIcon,
+  EmailIcon,
+  TicketIcon,
+  TrashIcon,
+} from '@/shared/ui/Icons';
 import TableActions, { TableActionItem } from '@/shared/ui/TableActions';
 
 import * as S from './styled';
@@ -20,13 +25,11 @@ interface GetEventAnalyticsTableColumnsParams {
   showOrganizer: boolean;
   allowRsvp: boolean;
   allowInvitation: boolean;
+  allowDelete: boolean;
   onOpenAnalytics: (event: EventAnalyticsListItem) => void;
   onOpenInvitation?: (event: EventAnalyticsListItem) => void;
   onSendRsvp?: (event: EventAnalyticsListItem) => void | Promise<void>;
-}
-
-function getOccupancyText(event: EventAnalyticsListItem): string {
-  return `${event.occupancy_percent}%`;
+  onDelete?: (eventId: string) => void | Promise<void>;
 }
 
 function getTicketsText(event: EventAnalyticsListItem): string {
@@ -44,9 +47,11 @@ export function getEventAnalyticsTableColumns({
   showOrganizer,
   allowRsvp,
   allowInvitation,
+  allowDelete,
   onOpenAnalytics,
   onOpenInvitation,
   onSendRsvp,
+  onDelete,
 }: GetEventAnalyticsTableColumnsParams): ColumnDef<EventAnalyticsListItem>[] {
   const columns: ColumnDef<EventAnalyticsListItem>[] = [
     {
@@ -122,7 +127,7 @@ export function getEventAnalyticsTableColumns({
       accessorKey: 'occupancy_percent',
       header: 'Заполненность',
       size: 130,
-      cell: ({ row }) => getOccupancyText(row.original),
+      cell: ({ row }) => `${row.original.occupancy_percent}%`,
     },
     {
       accessorKey: 'registrations_count',
@@ -142,7 +147,7 @@ export function getEventAnalyticsTableColumns({
     {
       id: 'actions',
       header: 'Действия',
-      size: 170,
+      size: 180,
       cell: ({ row }) => {
         const event = row.original;
         const isProcessing = processingId === event.id;
@@ -186,6 +191,25 @@ export function getEventAnalyticsTableColumns({
               confirmColorScheme: 'info',
             },
             onClick: () => onSendRsvp(event),
+          });
+        }
+
+        if (allowDelete && onDelete) {
+          actions.push({
+            key: 'delete',
+            icon: <TrashIcon />,
+            colorScheme: 'danger',
+            title: 'Удалить мероприятие',
+            disabled: isProcessing,
+            confirm: {
+              title: 'Удалить мероприятие?',
+              description: `Мероприятие «${event.title}» будет удалено. Действие нельзя отменить.`,
+              icon: <TrashIcon />,
+              confirmText: 'Удалить',
+              cancelText: 'Отменить',
+              confirmColorScheme: 'danger',
+            },
+            onClick: () => onDelete(event.id),
           });
         }
 

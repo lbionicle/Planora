@@ -7,6 +7,7 @@ import {
 } from '@/entities/event/model/registrationTypes';
 import { baseApi } from '@/shared/api/baseApi';
 import { ApiSuccessResponse } from '@/shared/api/types';
+import { downloadFile } from '@/shared/lib';
 
 export const participantRegistrationsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -37,6 +38,48 @@ export const participantRegistrationsApi = baseApi.injectEndpoints({
       providesTags: (_result, _error, eventId) => [
         { type: 'ParticipantRegistrations', id: eventId },
       ],
+    }),
+
+    downloadParticipantTicket: builder.mutation<
+      null,
+      {
+        registrationId: string;
+        filename: string;
+      }
+    >({
+      async queryFn(
+        { registrationId, filename },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) {
+        const result = await baseQuery({
+          url: `/participant/tickets/${registrationId}/download`,
+          method: 'GET',
+          responseHandler: async (response) => {
+            if (!response.ok) {
+              return response.json();
+            }
+
+            return response.blob();
+          },
+          cache: 'no-cache',
+        });
+
+        if (result.error) {
+          return {
+            error: result.error,
+          };
+        }
+
+        if (result.data instanceof Blob) {
+          downloadFile(result.data, filename);
+        }
+
+        return {
+          data: null,
+        };
+      },
     }),
 
     getParticipantTickets: builder.query<
@@ -120,4 +163,5 @@ export const {
   useGetParticipantEventRegistrationQuery,
   useGetParticipantTicketsQuery,
   useCancelParticipantTicketMutation,
+  useDownloadParticipantTicketMutation,
 } = participantRegistrationsApi;
