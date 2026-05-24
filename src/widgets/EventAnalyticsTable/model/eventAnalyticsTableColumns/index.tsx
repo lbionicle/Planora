@@ -8,7 +8,7 @@ import {
   eventStatusLabels,
 } from '@/entities/event/model/constants';
 import { formatDateTime } from '@/shared/lib';
-import { AnalyticsIcon, TicketIcon, TrashIcon } from '@/shared/ui/Icons';
+import { AnalyticsIcon, EmailIcon, TicketIcon } from '@/shared/ui/Icons';
 import TableActions, { TableActionItem } from '@/shared/ui/TableActions';
 
 import * as S from './styled';
@@ -19,9 +19,10 @@ interface GetEventAnalyticsTableColumnsParams {
   processingId: string | null;
   showOrganizer: boolean;
   allowRsvp: boolean;
+  allowInvitation: boolean;
   onOpenAnalytics: (event: EventAnalyticsListItem) => void;
+  onOpenInvitation?: (event: EventAnalyticsListItem) => void;
   onSendRsvp?: (event: EventAnalyticsListItem) => void | Promise<void>;
-  onDelete?: (eventId: string) => void | Promise<void>;
 }
 
 function getOccupancyText(event: EventAnalyticsListItem): string {
@@ -42,9 +43,10 @@ export function getEventAnalyticsTableColumns({
   processingId,
   showOrganizer,
   allowRsvp,
+  allowInvitation,
   onOpenAnalytics,
+  onOpenInvitation,
   onSendRsvp,
-  onDelete,
 }: GetEventAnalyticsTableColumnsParams): ColumnDef<EventAnalyticsListItem>[] {
   const columns: ColumnDef<EventAnalyticsListItem>[] = [
     {
@@ -156,6 +158,17 @@ export function getEventAnalyticsTableColumns({
           },
         ];
 
+        if (allowInvitation && onOpenInvitation) {
+          actions.push({
+            key: 'invitation',
+            icon: <EmailIcon />,
+            colorScheme: 'info',
+            title: 'Отправить приглашение на мероприятие',
+            disabled: isProcessing,
+            onClick: () => onOpenInvitation(event),
+          });
+        }
+
         if (allowRsvp && onSendRsvp) {
           actions.push({
             key: 'rsvp',
@@ -173,26 +186,6 @@ export function getEventAnalyticsTableColumns({
               confirmColorScheme: 'info',
             },
             onClick: () => onSendRsvp(event),
-          });
-        }
-
-        if (onDelete) {
-          actions.push({
-            key: 'delete',
-            icon: <TrashIcon />,
-            colorScheme: 'danger',
-            title: 'Удалить мероприятие',
-            disabled: isProcessing,
-            confirm: {
-              title: 'Удалить мероприятие?',
-              description:
-                'После удаления мероприятие пропадёт из системы, восстановить его будет нельзя.',
-              icon: <TrashIcon />,
-              confirmText: 'Удалить',
-              cancelText: 'Отменить',
-              confirmColorScheme: 'danger',
-            },
-            onClick: () => onDelete(event.id),
           });
         }
 
