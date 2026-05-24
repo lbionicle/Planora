@@ -18,6 +18,7 @@ import * as S from './styled';
 interface EventTicketCardProps {
   ticket: EventTicket;
   isCancelLoading?: boolean;
+  isDownloadLoading?: boolean;
   onShareClick: (ticket: EventTicket) => void | Promise<void>;
   onOpenOnlineClick: (ticket: EventTicket) => void;
   onDownloadClick: (ticket: EventTicket) => void;
@@ -27,6 +28,7 @@ interface EventTicketCardProps {
 export default function EventTicketCard({
   ticket,
   isCancelLoading = false,
+  isDownloadLoading = false,
   onShareClick,
   onOpenOnlineClick,
   onDownloadClick,
@@ -112,6 +114,7 @@ export default function EventTicketCard({
             <Button
               fullWidth
               colorScheme="accent"
+              disabled={isDownloadLoading}
               onClick={() => onDownloadClick(ticket)}
             >
               Скачать билет

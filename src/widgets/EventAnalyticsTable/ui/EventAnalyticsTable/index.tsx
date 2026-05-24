@@ -18,6 +18,7 @@ interface EventAnalyticsTableProps {
   showOrganizer?: boolean;
   allowRsvp?: boolean;
   allowInvitation?: boolean;
+  allowDelete?: boolean;
   onPageChange: (page: number) => void;
   onOpenAnalytics: (event: EventAnalyticsListItem) => void;
   onOpenInvitation?: (event: EventAnalyticsListItem) => void;
@@ -36,10 +37,12 @@ export default function EventAnalyticsTable({
   showOrganizer = false,
   allowRsvp = false,
   allowInvitation = false,
+  allowDelete = false,
   onPageChange,
   onOpenAnalytics,
   onOpenInvitation,
   onSendRsvp,
+  onDelete,
 }: EventAnalyticsTableProps): ReactNode {
   const columns = useMemo(
     () =>
@@ -50,9 +53,11 @@ export default function EventAnalyticsTable({
         showOrganizer,
         allowRsvp,
         allowInvitation,
+        allowDelete,
         onOpenAnalytics,
         onOpenInvitation,
         onSendRsvp,
+        onDelete,
       }),
     [
       page,
@@ -61,9 +66,11 @@ export default function EventAnalyticsTable({
       showOrganizer,
       allowRsvp,
       allowInvitation,
+      allowDelete,
       onOpenAnalytics,
       onOpenInvitation,
       onSendRsvp,
+      onDelete,
     ],
   );
 

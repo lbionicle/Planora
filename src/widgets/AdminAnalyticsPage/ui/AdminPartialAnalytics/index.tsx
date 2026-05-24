@@ -129,6 +129,7 @@ export default function AdminPartialAnalytics(): ReactNode {
           emptyText="Мероприятия для аналитики не найдены"
           showOrganizer
           allowRsvp={false}
+          allowDelete
           onPageChange={setPage}
           onOpenAnalytics={handleOpenAnalytics}
           onDelete={handleDelete}

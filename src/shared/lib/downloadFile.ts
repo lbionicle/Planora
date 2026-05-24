@@ -1,5 +1,5 @@
 export function downloadFile(file: Blob, filename: string): void {
-  const url = window.URL.createObjectURL(file);
+  const url = URL.createObjectURL(file);
   const link = document.createElement('a');
 
   link.href = url;
@@ -9,5 +9,5 @@ export function downloadFile(file: Blob, filename: string): void {
   link.click();
   link.remove();
 
-  window.URL.revokeObjectURL(url);
+  URL.revokeObjectURL(url);
 }

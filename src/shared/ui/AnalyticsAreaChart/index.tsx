@@ -79,10 +79,10 @@ export default function AnalyticsAreaChart({
         <AreaChart
           data={data}
           margin={{
-            top: 0,
+            top: 5,
             right: 10,
             left: -30,
-            bottom: 0,
+            bottom: 5,
           }}
         >
           <CartesianGrid stroke={theme.border.muted} vertical horizontal />
