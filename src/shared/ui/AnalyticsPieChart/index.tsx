@@ -108,7 +108,7 @@ function renderPieLabel(
 
 export default function AnalyticsPieChart({
   segments,
-  height,
+  height = 200,
   emptyText = 'Данные для диаграммы отсутствуют',
 }: AnalyticsPieChartProps): ReactNode {
   const theme = useTheme();

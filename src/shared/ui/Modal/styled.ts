@@ -40,14 +40,12 @@ function getBodyPadding({
   hasFooter,
   desktopX,
   desktopFull,
-  desktopCompactBottom,
 }: {
   bodyPadding: ModalBodyPadding;
   hasHeader: boolean;
   hasFooter: boolean;
   desktopX: string;
   desktopFull: string;
-  desktopCompactBottom: string;
 }) {
   if (bodyPadding === 'none') {
     return '0';
@@ -58,7 +56,7 @@ function getBodyPadding({
   }
 
   const top = hasHeader ? '0' : desktopX;
-  const bottom = hasFooter ? desktopCompactBottom : desktopX;
+  const bottom = hasFooter ? '0' : desktopX;
 
   return `${top} ${desktopX} ${bottom} ${desktopX}`;
 }
@@ -181,7 +179,6 @@ export const Body = styled.div<BodyProps>`
       hasFooter: $hasFooter,
       desktopX: theme.spacing.xl6,
       desktopFull: theme.spacing.xl6,
-      desktopCompactBottom: theme.spacing.xl3,
     })};
 
   ${thinScrollbar}
@@ -194,7 +191,6 @@ export const Body = styled.div<BodyProps>`
         hasFooter: $hasFooter,
         desktopX: theme.spacing.xl3,
         desktopFull: theme.spacing.xl3,
-        desktopCompactBottom: theme.spacing.xl2,
       })};
   }
 
@@ -206,7 +202,6 @@ export const Body = styled.div<BodyProps>`
         hasFooter: $hasFooter,
         desktopX: theme.spacing.lg,
         desktopFull: theme.spacing.lg,
-        desktopCompactBottom: theme.spacing.lg,
       })};
   }
 `;

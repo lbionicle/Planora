@@ -9,6 +9,7 @@ import {
   useGetOrganizerEventAnalyticsQuery,
   useSendOrganizerEventRsvpMutation,
 } from '@/entities/event/api/organizerAnalyticsApi';
+import { useSendOrganizerEventInvitationMutation } from '@/entities/event/api/organizerEventInvitationsApi';
 import { useDeleteOrganizerEventMutation } from '@/entities/event/api/organizerEventsApi';
 import {
   EventAnalyticsDetail,
@@ -19,6 +20,7 @@ import PageLayout from '@/shared/ui/PageLayout';
 import PageToolbar from '@/shared/ui/PageToolbar';
 import EventAnalyticsModal from '@/widgets/EventAnalyticsModal/ui/EventAnalyticsModal';
 import EventAnalyticsTable from '@/widgets/EventAnalyticsTable/ui/EventAnalyticsTable';
+import EventInvitationModal from '@/widgets/EventInvitationModal/ui/EventInvitationModal';
 
 const DEFAULT_PAGE = 1;
 const ANALYTICS_PAGE_LIMIT = 10;
@@ -29,6 +31,8 @@ export default function OrganizerAnalyticsPage(): ReactNode {
   const [search, setSearch] = useState('');
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [invitationEvent, setInvitationEvent] =
+    useState<EventAnalyticsListItem | null>(null);
 
   const debouncedSearch = useDebouncedValue(search.trim(), SEARCH_DELAY_MS);
 
@@ -45,6 +49,8 @@ export default function OrganizerAnalyticsPage(): ReactNode {
 
   const [sendRsvp] = useSendOrganizerEventRsvpMutation();
   const [deleteEvent] = useDeleteOrganizerEventMutation();
+  const [sendInvitation, { isLoading: isInvitationSending }] =
+    useSendOrganizerEventInvitationMutation();
 
   const [exportEventAnalyticsReport, { isLoading: isExportLoading }] =
     useExportOrganizerEventAnalyticsReportMutation();
@@ -71,6 +77,39 @@ export default function OrganizerAnalyticsPage(): ReactNode {
 
   const handleCloseAnalytics = (): void => {
     setSelectedEventId(null);
+  };
+
+  const handleOpenInvitation = useCallback(
+    (event: EventAnalyticsListItem): void => {
+      setInvitationEvent(event);
+    },
+    [],
+  );
+
+  const handleCloseInvitation = (): void => {
+    setInvitationEvent(null);
+  };
+
+  const handleSendInvitation = async (email: string): Promise<void> => {
+    if (!invitationEvent) {
+      return;
+    }
+
+    try {
+      setProcessingId(invitationEvent.id);
+
+      await sendInvitation({
+        eventId: invitationEvent.id,
+        email,
+      }).unwrap();
+
+      toast.success('Приглашение отправлено.');
+      setInvitationEvent(null);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error));
+    } finally {
+      setProcessingId(null);
+    }
   };
 
   const handleSendRsvp = useCallback(
@@ -153,9 +192,11 @@ export default function OrganizerAnalyticsPage(): ReactNode {
               : 'Аналитика мероприятий пока недоступна'
           }
           allowRsvp
+          allowInvitation
           showOrganizer={false}
           onPageChange={handlePageChange}
           onOpenAnalytics={handleOpenAnalytics}
+          onOpenInvitation={handleOpenInvitation}
           onSendRsvp={handleSendRsvp}
           onDelete={handleDelete}
         />
@@ -168,6 +209,14 @@ export default function OrganizerAnalyticsPage(): ReactNode {
         isExportLoading={isExportLoading}
         onClose={handleCloseAnalytics}
         onExportReport={handleExportReport}
+      />
+
+      <EventInvitationModal
+        isOpen={invitationEvent !== null}
+        eventTitle={invitationEvent?.title}
+        isLoading={isInvitationSending}
+        onClose={handleCloseInvitation}
+        onSubmit={handleSendInvitation}
       />
     </>
   );

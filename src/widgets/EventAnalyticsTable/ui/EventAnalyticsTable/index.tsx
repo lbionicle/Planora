@@ -17,8 +17,10 @@ interface EventAnalyticsTableProps {
   emptyText?: string;
   showOrganizer?: boolean;
   allowRsvp?: boolean;
+  allowInvitation?: boolean;
   onPageChange: (page: number) => void;
   onOpenAnalytics: (event: EventAnalyticsListItem) => void;
+  onOpenInvitation?: (event: EventAnalyticsListItem) => void;
   onSendRsvp?: (event: EventAnalyticsListItem) => void | Promise<void>;
   onDelete?: (eventId: string) => void | Promise<void>;
 }
@@ -33,10 +35,11 @@ export default function EventAnalyticsTable({
   emptyText = 'Данные аналитики не найдены',
   showOrganizer = false,
   allowRsvp = false,
+  allowInvitation = false,
   onPageChange,
   onOpenAnalytics,
+  onOpenInvitation,
   onSendRsvp,
-  onDelete,
 }: EventAnalyticsTableProps): ReactNode {
   const columns = useMemo(
     () =>
@@ -46,9 +49,10 @@ export default function EventAnalyticsTable({
         processingId,
         showOrganizer,
         allowRsvp,
+        allowInvitation,
         onOpenAnalytics,
+        onOpenInvitation,
         onSendRsvp,
-        onDelete,
       }),
     [
       page,
@@ -56,9 +60,10 @@ export default function EventAnalyticsTable({
       processingId,
       showOrganizer,
       allowRsvp,
+      allowInvitation,
       onOpenAnalytics,
+      onOpenInvitation,
       onSendRsvp,
-      onDelete,
     ],
   );
 
